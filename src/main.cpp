@@ -1,4 +1,5 @@
 #include "Behavior.hpp"
+#include "Config.hpp"
 #include "Fish.hpp"
 #include "glm/fwd.hpp"
 #include "p6/p6.h"
@@ -26,6 +27,7 @@ int main(int argc, char *argv[]) {
   // Actual app
   auto ctx = p6::Context{{.title = "Simple-p6-Setup"}};
   ctx.maximize_window();
+  Config::getInstance().ASPECT_RATIO = ctx.aspect_ratio();
 
   std::vector<Fish> fishs;
   std::vector<FishData> fishData;
@@ -40,7 +42,8 @@ int main(int argc, char *argv[]) {
   ctx.update = [&]() {
     ctx.background(p6::NamedColor::Blue);
 
-    ctx.square(p6::Center{0, 0}, p6::Radius{1});
+    // Comparison square
+    // ctx.square(p6::Center{0, 0}, p6::Radius{1});
 
     for (Fish &fish : fishs) {
       fish.draw(ctx);

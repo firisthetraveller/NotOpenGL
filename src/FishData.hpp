@@ -1,10 +1,9 @@
 #ifndef __FISHDATA__
 #define __FISHDATA__
 
+#include "Config.hpp"
 #include "glm/fwd.hpp"
 #include <p6/p6.h>
-
-static float NEAR_DISTANCE = 0.25f;
 
 class FishData {
 private:
@@ -22,7 +21,8 @@ public:
   bool operator==(const FishData &other) const { return _id == other._id; }
 
   bool isOutOfBounds() const;
-  bool isNear(const FishData &other, float distance = NEAR_DISTANCE) const;
+  bool isNear(const FishData &other,
+              float distance = Config::getInstance().VISUAL_RANGE) const;
 
   void teleport();
 };
