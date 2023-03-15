@@ -7,7 +7,7 @@ FishData::FishData(uint id, glm::vec3 center, p6::Radius radius,
       _movement(movement) {}
 
 bool isOutOfBoundCoord(float coordinate, float limit = 1.0) {
-  return (coordinate <= limit || coordinate >= limit);
+  return (coordinate <= -limit || coordinate >= limit);
 }
 
 bool FishData::isOutOfBounds() const {
