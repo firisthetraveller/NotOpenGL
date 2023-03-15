@@ -29,8 +29,8 @@ bool Fish::operator==(const Fish &other) const {
 }
 
 void Fish::addDefaultBehaviors() {
-  // _behaviors.emplace_back(Behavior::cohesion);
-  // _behaviors.emplace_back(Behavior::separation);
+  _behaviors.emplace_back(BehaviorFactory::cohesion());
+  _behaviors.emplace_back(BehaviorFactory::separation());
   _behaviors.emplace_back(BehaviorFactory::alignment());
 }
 
@@ -56,7 +56,7 @@ void Fish::update() {
 bool Fish::isNear(Fish &other) const { return _data.isNear(other.getData()); }
 
 Fish Fish::generate() {
-  return Fish(p6::random::point(), p6::Radius{generate_range(0, 0.3)},
+  return Fish(p6::random::point(), p6::Radius{generate_range(0, 0.15)},
               p6::Rotation{p6::random::angle()},
-              p6::random::direction() * 0.01f);
+              p6::random::direction() * 0.005f);
 }

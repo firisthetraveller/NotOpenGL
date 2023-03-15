@@ -23,7 +23,7 @@ TEST_CASE("Boids are generated in the pond") {
 TEST_CASE("Boids can detect each other") {
   // With a default range of 0.5
   Fish fish = Fish::generate();
-  Fish fish2 = Fish({fish.getData()._center.x + 0.3, fish.getData()._center.y},
+  Fish fish2 = Fish({fish.getData()._center.x + 0.2, fish.getData()._center.y},
                     fish.getData()._radius, fish.getData()._rotation, {0, 0});
 
   CHECK((fish.isNear(fish2)));

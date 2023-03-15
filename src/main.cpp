@@ -40,6 +40,8 @@ int main(int argc, char *argv[]) {
   ctx.update = [&]() {
     ctx.background(p6::NamedColor::Blue);
 
+    ctx.square(p6::Center{0, 0}, p6::Radius{1});
+
     for (Fish &fish : fishs) {
       fish.draw(ctx);
       fish.update();

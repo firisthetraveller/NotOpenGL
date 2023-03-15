@@ -4,6 +4,8 @@
 #include "glm/fwd.hpp"
 #include <p6/p6.h>
 
+static float NEAR_DISTANCE = 0.25f;
+
 class FishData {
 private:
   uint _id;
@@ -20,7 +22,7 @@ public:
   bool operator==(const FishData &other) const { return _id == other._id; }
 
   bool isOutOfBounds() const;
-  bool isNear(const FishData &other) const;
+  bool isNear(const FishData &other, float distance = NEAR_DISTANCE) const;
 
   void teleport();
 };

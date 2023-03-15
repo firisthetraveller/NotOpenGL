@@ -1,7 +1,5 @@
 #include "FishData.hpp"
 
-static float NEAR_DISTANCE = 0.5f;
-
 FishData::FishData(uint id, glm::vec3 center, p6::Radius radius,
                    p6::Rotation rotation, glm::vec3 movement)
     : _id(id), _center(center), _radius(radius), _rotation(rotation),
@@ -23,8 +21,8 @@ float teleportIfOutOfBounds(float origin) {
   return (isOutOfBoundCoord(origin)) ? otherSide(origin) : origin;
 }
 
-bool FishData::isNear(const FishData &other) const {
-  return glm::distance(this->_center, other._center) < NEAR_DISTANCE;
+bool FishData::isNear(const FishData &other, float distance) const {
+  return glm::distance(this->_center, other._center) < distance;
 }
 
 void FishData::teleport() {
