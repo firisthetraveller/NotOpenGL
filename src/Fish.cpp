@@ -12,8 +12,6 @@
 #include <sys/types.h>
 #include <vector>
 
-static float ALIGNMENT_FACTOR = 0.005f;
-
 uint nextId() {
   static uint currentId = 0;
   return currentId++;
@@ -33,7 +31,7 @@ bool Fish::operator==(const Fish &other) const {
 void Fish::addDefaultBehaviors() {
   // _behaviors.emplace_back(Behavior::cohesion);
   // _behaviors.emplace_back(Behavior::separation);
-  // _behaviors.emplace_back(Behavior::alignment);
+  _behaviors.emplace_back(BehaviorFactory::alignment());
 }
 
 void Fish::addBehavior(Behavior behavior) { _behaviors.emplace_back(behavior); }
@@ -54,6 +52,8 @@ void Fish::update() {
   // Movement
   _data._center += _data._movement;
 }
+
+bool Fish::isNear(Fish &other) const { return _data.isNear(other.getData()); }
 
 Fish Fish::generate() {
   return Fish(p6::random::point(), p6::Radius{generate_range(0, 0.3)},

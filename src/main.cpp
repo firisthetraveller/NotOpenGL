@@ -33,7 +33,6 @@ int main(int argc, char *argv[]) {
   for (uint i = 0; i < 100; i++) {
     fishs.emplace_back(Fish::generate());
     fishs[i].addBehavior(BehaviorFactory::teleport());
-    fishs[i].addBehavior(BehaviorFactory::alignment());
     fishData.emplace_back(fishs[i].getData());
   }
 

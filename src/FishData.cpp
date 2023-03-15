@@ -8,7 +8,7 @@ FishData::FishData(uint id, glm::vec3 center, p6::Radius radius,
       _movement(movement) {}
 
 bool isOutOfBoundCoord(float coordinate) {
-  return (coordinate <= -1.f || coordinate >= 1.f);
+  return (coordinate <= -1.0f || coordinate >= 1.0f);
 }
 
 bool FishData::isOutOfBounds() const {
@@ -16,7 +16,7 @@ bool FishData::isOutOfBounds() const {
 }
 
 float otherSide(float origin) {
-  return float(std::fmod((origin + 1.0), 2.0)) - 1.0f;
+  return float(std::fmod((origin + 1.0f), 2.0f)) - 1.0f;
 }
 
 float teleportIfOutOfBounds(float origin) {

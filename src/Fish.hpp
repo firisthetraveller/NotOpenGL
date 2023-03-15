@@ -24,6 +24,7 @@ public:
   bool operator==(const Fish &other) const;
 
   bool isOutOfBounds() const;
+  bool isNear(Fish &other) const;
 
   FishData getData() const { return _data; }
 
