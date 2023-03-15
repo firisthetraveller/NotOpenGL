@@ -14,7 +14,8 @@ bool FishData::isOutOfBounds() const {
 }
 
 float otherSide(float origin) {
-  return float(std::fmod((origin + 1.0f), 2.0f)) - 1.0f;
+  float calc = float(std::fmod((std::abs(origin) + 1.0f), 2.0f)) - 1.0f;
+  return (origin > 0) ? calc : -calc;
 }
 
 float teleportIfOutOfBounds(float origin) {
