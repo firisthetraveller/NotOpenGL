@@ -4,6 +4,7 @@
 #include "Config.hpp"
 #include "FishData.hpp"
 #include "glm/fwd.hpp"
+#include "glm/gtx/quaternion.hpp"
 #include <functional>
 #include <vector>
 
@@ -14,6 +15,16 @@ public:
   static Behavior teleport() {
     return [](FishData &fish, [[maybe_unused]] std::vector<FishData> &others) {
       fish.teleport();
+    };
+  }
+
+  static Behavior speedLimiter() {
+    return [](FishData &fish, [[maybe_unused]] std::vector<FishData> &others) {
+      float speed = glm::length(fish._movement);
+
+      if (speed > Config::getInstance().SPEED_LIMIT) {
+        fish._movement *= Config::getInstance().SPEED_LIMIT / speed;
+      }
     };
   }
 

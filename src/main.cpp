@@ -34,9 +34,32 @@ int main(int argc, char *argv[]) {
 
   for (uint i = 0; i < 100; i++) {
     fishs.emplace_back(Fish::generate());
-    fishs[i].addBehavior(BehaviorFactory::teleport());
+    // fishs[i].addBehavior(BehaviorFactory::teleport());
     fishData.emplace_back(fishs[i].getData());
   }
+
+  // ImGui demo
+  std::string text = "Hello";
+
+  ctx.imgui = [&]() {
+    ImGui::Begin("Parameters");
+    ImGui::SliderFloat("Visual range", &Config::getInstance().VISUAL_RANGE, 0.f,
+                       1.f);
+    ImGui::SliderFloat("Vital space", &Config::getInstance().MIN_DISTANCE, 0.f,
+                       0.3f);
+    ImGui::SliderFloat("Speed limit", &Config::getInstance().SPEED_LIMIT, 0.f,
+                       0.3f);
+    ImGui::SliderFloat("Separation", &Config::getInstance().SEPARATION_FACTOR,
+                       0.f, 1.f);
+    ImGui::SliderFloat("Alignment", &Config::getInstance().ALIGNMENT_FACTOR,
+                       0.f, 1.f);
+    ImGui::SliderFloat("Cohesion", &Config::getInstance().COHESION_FACTOR, 0.f,
+                       1.f);
+    ImGui::End();
+    // Show the official ImGui demo window
+    // It is very useful to discover all the widgets available in ImGui
+    // ImGui::ShowDemoWindow();
+  };
 
   // Declare your infinite update loop.
   ctx.update = [&]() {

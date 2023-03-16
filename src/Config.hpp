@@ -17,6 +17,8 @@ public:
   float ALIGNMENT_FACTOR = 0.005f;
   float SEPARATION_FACTOR = 0.005f;
 
+  float SPEED_LIMIT = 0.2f;
+
   static Config &getInstance() {
     static Config INSTANCE;
 
