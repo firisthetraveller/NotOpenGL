@@ -36,7 +36,7 @@ void Fish::addDefaultBehaviors() {
   _behaviors.emplace_back(BehaviorFactory::cohesion());
   _behaviors.emplace_back(BehaviorFactory::separation());
   _behaviors.emplace_back(BehaviorFactory::alignment());
-  _behaviors.emplace_back(BehaviorFactory::teleport());
+  _behaviors.emplace_back(BehaviorFactory::wallAvoidance());
   _behaviors.emplace_back(BehaviorFactory::speedLimiter());
 }
 

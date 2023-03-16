@@ -18,6 +18,8 @@ public:
   float SEPARATION_FACTOR = 0.005f;
 
   float SPEED_LIMIT = 0.2f;
+  float WALL_MARGIN = 0.2f;
+  float WALL_TURN_FACTOR = 0.1f;
 
   static Config &getInstance() {
     static Config INSTANCE;

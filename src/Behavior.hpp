@@ -12,9 +12,28 @@ using Behavior = std::function<void(FishData &, std::vector<FishData> &)>;
 
 class BehaviorFactory {
 public:
-  static Behavior teleport() {
+  static Behavior wallTeleport() {
     return [](FishData &fish, [[maybe_unused]] std::vector<FishData> &others) {
       fish.teleport();
+    };
+  }
+
+  static Behavior wallAvoidance() {
+    return [](FishData &fish, [[maybe_unused]] std::vector<FishData> &others) {
+      if (fish._center.x < -Config::getInstance().ASPECT_RATIO +
+                               Config::getInstance().WALL_MARGIN) {
+        fish._movement.x += Config::getInstance().WALL_TURN_FACTOR;
+      }
+      if (fish._center.x > Config::getInstance().ASPECT_RATIO -
+                               Config::getInstance().WALL_MARGIN) {
+        fish._movement.x -= Config::getInstance().WALL_TURN_FACTOR;
+      }
+      if (fish._center.y < -1 + Config::getInstance().WALL_MARGIN) {
+        fish._movement.y += Config::getInstance().WALL_TURN_FACTOR;
+      }
+      if (fish._center.y > 1 - Config::getInstance().WALL_MARGIN) {
+        fish._movement.y -= Config::getInstance().WALL_TURN_FACTOR;
+      }
     };
   }
 

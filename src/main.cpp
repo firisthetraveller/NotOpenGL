@@ -55,6 +55,10 @@ int main(int argc, char *argv[]) {
                        0.f, 1.f);
     ImGui::SliderFloat("Cohesion", &Config::getInstance().COHESION_FACTOR, 0.f,
                        1.f);
+    ImGui::SliderFloat("Wall margin", &Config::getInstance().WALL_MARGIN, 0.f,
+                       0.5f);
+    ImGui::SliderFloat("Wall turn", &Config::getInstance().WALL_TURN_FACTOR,
+                       0.f, 0.5f);
     ImGui::End();
     // Show the official ImGui demo window
     // It is very useful to discover all the widgets available in ImGui
