@@ -1,5 +1,6 @@
 #include "FishData.hpp"
 #include "Config.hpp"
+#include "glm/fwd.hpp"
 
 FishData::FishData(unsigned int id, glm::vec3 center, p6::Radius radius,
                    p6::Rotation rotation, glm::vec3 movement)
@@ -26,6 +27,12 @@ static float teleportIfOutOfBounds(float origin, float limit = 1.0f) {
 
 bool FishData::isNear(const FishData &other, float distance) const {
   return glm::distance(this->_center, other._center) < distance;
+}
+
+bool FishData::isNear(const Food &food, float distance) const {
+  return glm::distance(glm::vec2(this->_center),
+                       glm::vec2(food.getPosition())) <
+         (distance - food.getHitbox());
 }
 
 void FishData::teleport() {

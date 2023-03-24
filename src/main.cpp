@@ -1,6 +1,8 @@
 #include "Behavior.hpp"
 #include "Config.hpp"
+#include "Environment.hpp"
 #include "Fish.hpp"
+#include "Food.hpp"
 #include "glm/fwd.hpp"
 #include "imgui.h"
 #include "p6/p6.h"
@@ -13,10 +15,25 @@
 static std::vector<FishData> getDataFromFish(std::vector<Fish> &fish) {
   std::vector<FishData> data;
   data.reserve(fish.size());
+
   for (Fish &f : fish) {
     data.emplace_back(f.getData());
   }
   return data;
+}
+
+void eatingTime(std::vector<Fish> &fishs, std::vector<Food> &foods) {
+  for (Fish &fish : fishs) {
+    for (Food &food : foods) {
+      if (glm::distance(food.getPosition(), fish.getData()._center) <
+          food.getHitbox()) {
+        fish.eats(food);
+        if (!fish.canEat()) {
+          break;
+        }
+      }
+    }
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -39,10 +56,7 @@ int main(int argc, char *argv[]) {
   ctx.maximize_window();
   Config::getInstance().ASPECT_RATIO = ctx.aspect_ratio();
 
-  std::vector<Fish> fishs(50);
-
-  // ImGui demo
-  std::string text = "Hello";
+  std::vector<Fish> fishs = std::vector<Fish>(200);
 
   ctx.imgui = [&]() {
     ImGui::Begin("Parameters");
@@ -95,6 +109,12 @@ int main(int argc, char *argv[]) {
 
       ImGui::ColorEdit4("Fish type #1",
                         Config::getInstance().FISH_COLOR_1.data(), misc_flags);
+
+      ImGui::ColorEdit4("Food", Config::getInstance().FOOD_COLOR.data(),
+                        misc_flags);
+      ImGui::ColorEdit4("Food - Fill",
+                        Config::getInstance().FOOD_FILL_COLOR.data(),
+                        misc_flags);
       ImGui::ColorEdit4("Visual range",
                         Config::getInstance().VISUAL_RANGE_COLOR.data(),
                         misc_flags);
@@ -109,14 +129,21 @@ int main(int argc, char *argv[]) {
 
     // Show the official ImGui demo window
     // It is very useful to discover all the widgets available in ImGui
-    ImGui::ShowDemoWindow();
+    // ImGui::ShowDemoWindow();
+  };
+
+  ctx.mouse_pressed = [&](p6::MouseButton button) {
+    if (button.button == p6::Button::Left) {
+      Environment::getInstance().foods.emplace_back(
+          Food({button.position.x, button.position.y, 0}));
+    }
   };
 
   // Declare your infinite update loop.
   ctx.update = [&]() {
     ctx.background(p6::NamedColor::Blue);
 
-    std::vector<FishData> fishData = getDataFromFish(fishs);
+    Environment::getInstance().fishData = getDataFromFish(fishs);
 
     // Comparison square
     // ctx.square(p6::Center{0, 0}, p6::Radius{1});
@@ -124,8 +151,22 @@ int main(int argc, char *argv[]) {
     for (Fish &fish : fishs) {
       fish.draw(ctx);
       fish.update();
-      fish.applyBehaviors(fishData);
+      fish.applyBehaviors(Environment::getInstance());
     }
+
+    eatingTime(fishs, Environment::getInstance().foods);
+
+    // Food
+    std::vector<Food> tmp;
+
+    for (Food &food : Environment::getInstance().foods) {
+      if (food.exists()) {
+        tmp.emplace_back(food);
+        food.draw(ctx);
+      }
+    }
+
+    Environment::getInstance().foods = tmp;
   };
 
   // Should be done last. It starts the infinite loop.

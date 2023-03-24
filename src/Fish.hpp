@@ -1,5 +1,7 @@
 #ifndef __FISH__
 #define __FISH__
+#include "Environment.hpp"
+#include "Food.hpp"
 #include "glm/fwd.hpp"
 #include <functional>
 #include <p6/p6.h>
@@ -13,6 +15,7 @@ class Fish {
 private:
   FishData _data;
   std::vector<Behavior> _behaviors;
+  int _eatingCooldown;
 
   void addDefaultBehaviors();
 
@@ -31,9 +34,12 @@ public:
   const FishData &getData() const { return _data; }
   void showId();
 
+  void eats(Food &food);
+  bool canEat() const;
+
   void draw(p6::Context &ctx);
   void addBehavior(Behavior behavior);
-  void applyBehaviors(std::vector<FishData> &others);
+  void applyBehaviors(Environment &env);
   void update();
 };
 

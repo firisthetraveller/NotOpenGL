@@ -20,6 +20,8 @@ public:
   glm::vec3 getPosition() const { return _position; }
   float getHitbox() const { return _radius; }
   void getsBitten() { _remainingBites -= 1; }
+
+  void draw(p6::Context &ctx);
 };
 
 #endif

@@ -1,7 +1,9 @@
 #include "Fish.hpp"
 #include "Behavior.hpp"
 #include "Config.hpp"
+#include "Environment.hpp"
 #include "FishData.hpp"
+#include "Food.hpp"
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include "glm/gtx/norm.hpp"
@@ -27,11 +29,14 @@ Fish::Fish(const glm::vec2 &center, const p6::Radius &radius,
           radius,
           rotation,
           glm::vec3(movement, 0),
-      })) {
+      })),
+      _eatingCooldown(0) {
   addDefaultBehaviors();
 }
 
-Fish::Fish(const FishData &data) : _data(data) { addDefaultBehaviors(); }
+Fish::Fish(const FishData &data) : _data(data), _eatingCooldown(0) {
+  addDefaultBehaviors();
+}
 
 bool Fish::operator==(const Fish &other) const {
   return other._data == this->_data;
@@ -42,6 +47,7 @@ void Fish::addDefaultBehaviors() {
   _behaviors.emplace_back(BehaviorFactory::separation());
   _behaviors.emplace_back(BehaviorFactory::alignment());
   _behaviors.emplace_back(BehaviorFactory::wallAvoidance());
+  _behaviors.emplace_back(BehaviorFactory::foodSeeking());
 
   // Speed limit has to be at the end
   _behaviors.emplace_back(BehaviorFactory::speedLimiter());
@@ -54,13 +60,22 @@ void Fish::addBehavior(Behavior behavior) {
 /***
  * Apply behaviors in the insert order.
  */
-void Fish::applyBehaviors(std::vector<FishData> &others) {
+void Fish::applyBehaviors(Environment &env) {
   for (auto &behavior : _behaviors) {
-    behavior(this->_data, others);
+    behavior(this->_data, env);
   }
 }
 
 void Fish::showId() { std::cout << _data.getId() << '\n'; }
+
+void Fish::eats(Food &food) {
+  _eatingCooldown =
+      std::max(Config::getInstance().FOOD_COOLDOWN_FRAMES,
+               _eatingCooldown + Config::getInstance().FOOD_COOLDOWN_FRAMES);
+  food.getsBitten();
+}
+
+bool Fish::canEat() const { return _eatingCooldown < 0; }
 
 void Fish::draw(p6::Context &ctx) {
   float base_stroke_weight = ctx.stroke_weight;
@@ -68,6 +83,7 @@ void Fish::draw(p6::Context &ctx) {
   // showId();
   auto color = Config::getInstance().FISH_COLOR_1;
   ctx.stroke = {color[0], color[1], color[2], color[3]};
+  ctx.fill = {color[0], color[1], color[2], color[3]};
   ctx.use_stroke = true;
 
   ctx.square(p6::Center{_data._center}, _data._radius,
@@ -97,6 +113,9 @@ void Fish::draw(p6::Context &ctx) {
 }
 
 void Fish::update() {
+  // Fullness
+  _eatingCooldown--;
+
   // Movement
   _data._center += _data._movement;
 }

@@ -28,6 +28,7 @@ public:
   // Food
   float DEFAULT_FOOD_SIZE = 0.01f;
   int DEFAULT_FOOD_BITES = 10;
+  int FOOD_COOLDOWN_FRAMES = 60;
 
   // Visual indicators
   bool SHOW_VISUAL_RANGES = true;
@@ -35,6 +36,10 @@ public:
 
   // Style
   std::array<float, 4> FISH_COLOR_1 = {0.f, 0.f, 0.f, 200.0f / 255.0f};
+
+  std::array<float, 4> FOOD_COLOR = {1.f, 0.f, 0.f, 200.0f / 255.0f};
+  std::array<float, 4> FOOD_FILL_COLOR = {1.f, 0.f, 0.f, 255.0f / 255.0f};
+
   std::array<float, 4> VISUAL_RANGE_COLOR = {0.f, 0.f, 0.f, 200.0f / 255.0f};
   std::array<float, 4> VISUAL_RANGE_FILL_COLOR = {
       114.0f / 255.0f, 144.0f / 255.0f, 154.0f / 255.0f, 200.0f / 255.0f};
