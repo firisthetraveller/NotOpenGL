@@ -1,7 +1,7 @@
 #ifndef __FISH__
 #define __FISH__
 #include "Environment.hpp"
-#include "Food.hpp"
+#include "Food/Food.hpp"
 #include "glm/fwd.hpp"
 #include <functional>
 #include <p6/p6.h>

@@ -1,8 +1,8 @@
 #ifndef __ENVIRONMENT_FISH__
 #define __ENVIRONMENT_FISH__
 
-#include "FishData.hpp"
-#include "Food.hpp"
+#include "Fish/FishData.hpp"
+#include "Food/Food.hpp"
 #include <vector>
 
 struct Environment {

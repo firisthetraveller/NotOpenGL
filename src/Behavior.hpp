@@ -3,8 +3,8 @@
 
 #include "Config.hpp"
 #include "Environment.hpp"
-#include "FishData.hpp"
-#include "Food.hpp"
+#include "Fish/FishData.hpp"
+#include "Food/Food.hpp"
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include "glm/gtx/quaternion.hpp"

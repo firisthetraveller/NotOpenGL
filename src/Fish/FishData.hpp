@@ -2,7 +2,7 @@
 #define __FISHDATA__
 
 #include "Config.hpp"
-#include "Food.hpp"
+#include "Food/Food.hpp"
 #include "glm/fwd.hpp"
 #include <p6/p6.h>
 #include <sys/types.h>

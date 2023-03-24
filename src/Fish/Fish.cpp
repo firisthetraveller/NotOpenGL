@@ -3,7 +3,7 @@
 #include "Config.hpp"
 #include "Environment.hpp"
 #include "FishData.hpp"
-#include "Food.hpp"
+#include "Food/Food.hpp"
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include "glm/gtx/norm.hpp"
