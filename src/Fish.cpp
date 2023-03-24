@@ -5,7 +5,6 @@
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include "glm/gtx/norm.hpp"
-#include "internal/generate_range.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -81,8 +80,3 @@ void Fish::update() {
 }
 
 bool Fish::isNear(Fish &other) const { return _data.isNear(other.getData()); }
-
-Fish Fish::generate() {
-  return Fish(p6::random::point(), p6::Radius{generate_range(0.005, 0.0075)},
-              p6::Rotation{}, p6::random::direction() * 0.005f);
-}
