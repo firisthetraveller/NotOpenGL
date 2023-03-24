@@ -6,6 +6,7 @@
 #include "glm/fwd.hpp"
 #include "glm/gtx/quaternion.hpp"
 #include <functional>
+#include <iostream>
 #include <vector>
 
 using Behavior = std::function<void(FishData &, std::vector<FishData> &)>;
@@ -15,6 +16,7 @@ public:
   static Behavior wallTeleport() {
     return [](FishData &fish, [[maybe_unused]] std::vector<FishData> &others) {
       fish.teleport();
+      // std::cout << "Teleport" << '\n';
     };
   }
 
@@ -34,6 +36,7 @@ public:
       if (fish._center.y > 1 - Config::getInstance().WALL_MARGIN) {
         fish._movement.y -= Config::getInstance().WALL_TURN_FACTOR;
       }
+      // std::cout << "Wall avoidance" << '\n';
     };
   }
 
@@ -44,12 +47,13 @@ public:
       if (speed > Config::getInstance().SPEED_LIMIT) {
         fish._movement *= Config::getInstance().SPEED_LIMIT / speed;
       }
+      // std::cout << "Speed limiter" << '\n';
     };
   }
 
   static Behavior cohesion() {
     return [](FishData &fish, std::vector<FishData> &others) {
-      uint neighbors = 0;
+      unsigned int neighbors = 0;
       glm::vec3 center(0);
 
       for (FishData &other : others) {
@@ -66,6 +70,8 @@ public:
         fish._movement +=
             (center - fish._center) * Config::getInstance().COHESION_FACTOR;
       }
+
+      // std::cout << "Cohesion" << '\n';
     };
   }
 
@@ -81,12 +87,14 @@ public:
       }
 
       fish._movement += movement * Config::getInstance().SEPARATION_FACTOR;
+
+      // std::cout << "Separation" << '\n';
     };
   }
 
   static Behavior alignment() {
     return [](FishData &fish, std::vector<FishData> &others) {
-      uint neighbors = 0;
+      unsigned int neighbors = 0;
       glm::vec3 alignmentVector(0);
 
       for (FishData &other : others) {
@@ -103,6 +111,8 @@ public:
         fish._movement +=
             alignmentVector * Config::getInstance().ALIGNMENT_FACTOR;
       }
+
+      // std::cout << "Alignment" << '\n';
     };
   }
 };
