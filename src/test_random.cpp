@@ -15,14 +15,14 @@ TEST_CASE("Random range is good") {
 
 TEST_CASE("Boids are generated in the pond") {
   for (uint i = 0; i < 100; i++) {
-    Fish fish = Fish::generate();
+    Fish fish = Fish();
     CHECK((fish.getData()._center.x > -1 && fish.getData()._center.x < 1.0 &&
            fish.getData()._center.y > -1 && fish.getData()._center.y < 1.0));
   }
 }
 
 TEST_CASE("Boids can detect each other") {
-  Fish fish = Fish::generate();
+  Fish fish = Fish();
   Fish fish2 =
       Fish({fish.getData()._center.x + Config::getInstance().VISUAL_RANGE / 2,
             fish.getData()._center.y},

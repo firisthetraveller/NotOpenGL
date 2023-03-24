@@ -11,7 +11,8 @@
 #include "doctest/doctest.h"
 
 static std::vector<FishData> getDataFromFish(std::vector<Fish> &fish) {
-  std::vector<FishData> data(fish.size());
+  std::vector<FishData> data;
+  data.reserve(fish.size());
   for (Fish &f : fish) {
     data.emplace_back(f.getData());
   }
@@ -38,12 +39,7 @@ int main(int argc, char *argv[]) {
   ctx.maximize_window();
   Config::getInstance().ASPECT_RATIO = ctx.aspect_ratio();
 
-  std::vector<Fish> fishs;
-
-  for (unsigned int i = 0; i < 50; i++) {
-    fishs.emplace_back(Fish::generate());
-    // fishs[i].addBehavior(BehaviorFactory::teleport());
-  }
+  std::vector<Fish> fishs(50);
 
   // ImGui demo
   std::string text = "Hello";
