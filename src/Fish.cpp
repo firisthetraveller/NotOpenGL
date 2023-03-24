@@ -63,15 +63,37 @@ void Fish::applyBehaviors(std::vector<FishData> &others) {
 void Fish::showId() { std::cout << _data.getId() << '\n'; }
 
 void Fish::draw(p6::Context &ctx) {
+  float base_stroke_weight = ctx.stroke_weight;
+
   // showId();
+  auto color = Config::getInstance().FISH_COLOR_1;
+  ctx.stroke = {color[0], color[1], color[2], color[3]};
+  ctx.use_stroke = true;
+
   ctx.square(p6::Center{_data._center}, _data._radius,
              p6::Rotation(p6::Angle{glm::vec2(_data._movement)}));
 
-  ctx.circle(p6::Center{_data._center}, Config::getInstance().VISUAL_RANGE);
+  if (Config::getInstance().SHOW_VISUAL_RANGES) {
+    auto color = Config::getInstance().VISUAL_RANGE_COLOR;
+    ctx.stroke = {color[0], color[1], color[2], color[3]};
+    color = Config::getInstance().VISUAL_RANGE_FILL_COLOR;
+    ctx.fill = {color[0], color[1], color[2], color[3]};
+    ctx.use_stroke = true;
+    ctx.stroke_weight = base_stroke_weight / 10.f;
+    ctx.circle(p6::Center{_data._center}, Config::getInstance().VISUAL_RANGE);
+  }
 
   // Draw vision vector
-  glm::vec3 p2 = _data._movement * 10.f;
-  ctx.line(_data._center, _data._center + p2);
+  if (Config::getInstance().SHOW_MOVEMENT_VECTOR) {
+    auto color = Config::getInstance().MOVEMENT_RANGE_COLOR;
+    ctx.stroke = {color[0], color[1], color[2], color[3]};
+    ctx.use_stroke = true;
+    ctx.stroke_weight = base_stroke_weight / 10.f;
+    glm::vec3 p2 = _data._movement * 10.f;
+    ctx.line(_data._center, _data._center + p2);
+  }
+
+  ctx.stroke_weight = base_stroke_weight;
 }
 
 void Fish::update() {
