@@ -77,7 +77,7 @@ void Fish::eats(Food &food) {
 
 bool Fish::canEat() const { return _eatingCooldown < 0; }
 
-void Fish::draw(p6::Context &ctx) {
+void Fish::draw(p6::Context &ctx) const {
   float base_stroke_weight = ctx.stroke_weight;
 
   // showId();

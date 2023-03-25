@@ -24,6 +24,7 @@ public:
        const p6::Radius &radius = p6::Radius{generate_range(0.005, 0.0075)},
        const p6::Rotation &rotation = p6::Rotation{},
        const glm::vec2 &movement = p6::random::direction() * 0.005f);
+  Fish(const Fish &) = delete;
   explicit Fish(const FishData &data);
 
   bool operator==(const Fish &other) const;
@@ -37,7 +38,7 @@ public:
   void eats(Food &food);
   bool canEat() const;
 
-  void draw(p6::Context &ctx);
+  void draw(p6::Context &ctx) const;
   void addBehavior(Behavior behavior);
   void applyBehaviors(Environment &env);
   void update();

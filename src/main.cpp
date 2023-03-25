@@ -5,32 +5,36 @@
 #include "Food/Food.hpp"
 #include "glm/fwd.hpp"
 #include "imgui.h"
+#include "internal/stream.hpp"
 #include "p6/p6.h"
 #include <cstdlib>
+#include <functional>
 #include <memory>
 #include <vector>
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest/doctest.h"
 #include "internal/imgui.hpp"
 
-static std::vector<FishData> getDataFromFish(std::vector<Fish> &fish) {
+static std::vector<FishData> getDataFromFish(std::vector<Fish> &fishs) {
   std::vector<FishData> data;
-  data.reserve(fish.size());
+  data.reserve(fishs.size());
 
-  for (Fish &f : fish) {
-    data.emplace_back(f.getData());
+  for (Fish &fish : fishs) {
+    data.emplace_back(fish.getData());
   }
   return data;
 }
 
 void eatingTime(std::vector<Fish> &fishs, std::vector<Food> &foods) {
   for (Fish &fish : fishs) {
-    for (Food &food : foods) {
-      if (glm::distance(food.getPosition(), fish.getData()._center) <
-          food.getHitbox()) {
-        fish.eats(food);
-        if (!fish.canEat()) {
-          break;
+    if (fish.canEat()) {
+      for (Food &food : foods) {
+        if (glm::distance(food.getPosition(), fish.getData()._center) <
+            food.getHitbox()) {
+          fish.eats(food);
+          if (!fish.canEat()) {
+            break;
+          }
         }
       }
     }
@@ -86,16 +90,15 @@ int main(int argc, char *argv[]) {
     eatingTime(fishs, Environment::getInstance().foods);
 
     // Food
-    std::vector<Food> tmp;
+    Environment::getInstance().foods =
+        filter(Environment::getInstance().foods,
+               Predicate<Food>([](Food &f) { return f.exists(); }));
 
     for (Food &food : Environment::getInstance().foods) {
       if (food.exists()) {
-        tmp.emplace_back(food);
         food.draw(ctx);
       }
     }
-
-    Environment::getInstance().foods = tmp;
   };
 
   // Should be done last. It starts the infinite loop.

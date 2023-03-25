@@ -4,8 +4,8 @@
 #include <stdexcept>
 
 inline float generate_range(float min, float max) {
-  static std::random_device rd;
-  static std::mt19937 mt32(rd());
+  static std::random_device rand;
+  static std::mt19937 mt32(rand());
   if (min > max) {
     throw std::invalid_argument("max should be bigger than min");
   }

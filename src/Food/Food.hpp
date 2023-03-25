@@ -21,7 +21,7 @@ public:
   float getHitbox() const { return _radius; }
   void getsBitten() { _remainingBites -= 1; }
 
-  void draw(p6::Context &ctx);
+  void draw(p6::Context &ctx) const;
 };
 
 #endif
