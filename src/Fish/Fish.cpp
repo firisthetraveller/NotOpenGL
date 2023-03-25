@@ -90,7 +90,7 @@ void Fish::draw(p6::Context &ctx) const {
              p6::Rotation(p6::Angle{glm::vec2(_data._movement)}));
 
   if (Config::getInstance().SHOW_VISUAL_RANGES) {
-    auto color = Config::getInstance().VISUAL_RANGE_COLOR;
+    color = Config::getInstance().VISUAL_RANGE_COLOR;
     ctx.stroke = {color[0], color[1], color[2], color[3]};
     color = Config::getInstance().VISUAL_RANGE_FILL_COLOR;
     ctx.fill = {color[0], color[1], color[2], color[3]};
@@ -101,7 +101,7 @@ void Fish::draw(p6::Context &ctx) const {
 
   // Draw vision vector
   if (Config::getInstance().SHOW_MOVEMENT_VECTOR) {
-    auto color = Config::getInstance().MOVEMENT_RANGE_COLOR;
+    color = Config::getInstance().MOVEMENT_RANGE_COLOR;
     ctx.stroke = {color[0], color[1], color[2], color[3]};
     ctx.use_stroke = true;
     ctx.stroke_weight = base_stroke_weight / 10.f;
