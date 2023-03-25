@@ -16,7 +16,9 @@
 
 using Behavior = std::function<void(FishData &, Environment &)>;
 
-static float notXSq(float x) { return 1 - std::powf((x - 1), 32); }
+static float notXSq(float value) {
+  return 1 - float(std::pow((value - 1), 32));
+}
 
 class BehaviorFactory {
 public:
@@ -62,19 +64,24 @@ public:
     return [](FishData &fish, Environment &env) {
       std::vector<std::pair<Food, float>> map;
 
-      if (env.foods.empty()) {
+      for (Food &food : env.foods) {
+        float distance = glm::distance(glm::vec2(food.getPosition()),
+                                       glm::vec2(fish._center)) -
+                         food.getHitbox();
+        if (distance < Config::getInstance().VISUAL_RANGE) {
+          map.emplace_back(food, distance);
+        }
+      }
+
+      if (map.empty()) {
         return;
       }
-      for (Food &food : env.foods) {
-        map.emplace_back(food, glm::distance(glm::vec2(food.getPosition()),
-                                             glm::vec2(fish._center)) -
-                                   food.getHitbox());
-      }
+
       // Minimum
       auto min = std::accumulate(
           map.begin(), map.end(), map[0],
-          [](std::pair<Food, float> p1, std::pair<Food, float> p2) {
-            return (p1.second < p2.second) ? p1 : p2;
+          [](std::pair<Food, float> one, std::pair<Food, float> other) {
+            return (one.second < other.second) ? one : other;
           });
 
       // std::cout << min.second << " - " << Config::getInstance().VISUAL_RANGE
