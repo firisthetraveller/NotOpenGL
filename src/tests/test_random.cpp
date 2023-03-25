@@ -7,14 +7,14 @@
 // To learn more about Doctest, see
 // https://github.com/doctest/doctest/blob/master/doc/markdown/tutorial.md
 TEST_CASE("Random range is good") {
-  for (uint i = 0; i < 100; i++) {
+  for (unsigned int i = 0; i < 100; i++) {
     float tmp = generate_range(-5, 5);
     CHECK((tmp > -5.0 && tmp < 5.0));
   }
 }
 
 TEST_CASE("Boids are generated in the pond") {
-  for (uint i = 0; i < 100; i++) {
+  for (unsigned int i = 0; i < 100; i++) {
     Fish fish = Fish();
     CHECK((fish.getData()._center.x > -1 && fish.getData()._center.x < 1.0 &&
            fish.getData()._center.y > -1 && fish.getData()._center.y < 1.0));
