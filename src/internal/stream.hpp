@@ -1,8 +1,10 @@
 #pragma once
 
+#include <algorithm>
 #include <cstdio>
 #include <functional>
 #include <random>
+#include <ranges>
 #include <stdexcept>
 #include <vector>
 
@@ -17,11 +19,15 @@ template <typename T> using Predicate = std::function<bool(T &)>;
  */
 template <typename T>
 std::vector<T> filter(std::vector<T> &vec, Predicate<T> predicate) {
-  std::vector<T> result;
-  for (T element : vec) {
-    if (predicate(element)) {
-      result.emplace_back(element);
+  //  Does not work with Clang :(
+  //  return vec | std::views::filter(predicate);
+  std::vector<T> tmp;
+
+  for (T item : vec) {
+    if (predicate(item)) {
+      tmp.emplace_back(item);
     }
   }
-  return result;
+
+  return tmp;
 }

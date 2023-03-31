@@ -4,6 +4,7 @@
 #include "Food/Food.hpp"
 #include "glm/fwd.hpp"
 #include <functional>
+#include <memory>
 #include <p6/p6.h>
 #include <vector>
 
@@ -13,7 +14,7 @@
 
 class Fish {
 private:
-  FishData _data;
+  std::shared_ptr<FishData> _data;
   std::vector<Behavior> _behaviors;
   int _eatingCooldown;
 
@@ -25,17 +26,17 @@ public:
        const p6::Rotation &rotation = p6::Rotation{},
        const glm::vec2 &movement = p6::random::direction() * 0.005f);
   Fish(const Fish &) = delete;
-  explicit Fish(const FishData &data);
+  explicit Fish(std::shared_ptr<FishData> data);
 
   bool operator==(const Fish &other) const;
 
   bool isOutOfBounds() const;
-  bool isNear(Fish &other) const;
+  bool isNear(std::shared_ptr<Fish> &other) const;
 
-  const FishData &getData() const { return _data; }
+  const std::shared_ptr<FishData> &getData() const { return _data; }
   void showId();
 
-  void eats(Food &food);
+  void eats(std::shared_ptr<Food> &food);
   bool canEat() const;
 
   void draw(p6::Context &ctx) const;

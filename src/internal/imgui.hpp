@@ -27,9 +27,9 @@ inline void imguiInit() {
 
   if (ImGui::CollapsingHeader("Wall avoidance parameters")) {
     ImGui::SliderFloat("Wall margin", &Config::getInstance().WALL_MARGIN, 0.f,
-                       0.2f);
+                       0.4f);
     ImGui::SliderFloat("Wall turn", &Config::getInstance().WALL_TURN_FACTOR,
-                       0.f, 0.05f);
+                       0.f, 0.002f);
   }
 
   if (ImGui::CollapsingHeader("Debug")) {

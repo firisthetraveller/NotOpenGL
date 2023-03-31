@@ -2,6 +2,7 @@
 #include "Config.hpp"
 #include "Environment.hpp"
 #include "Fish/Fish.hpp"
+#include "Fish/FishData.hpp"
 #include "Food/Food.hpp"
 #include "glm/fwd.hpp"
 #include "imgui.h"
@@ -9,32 +10,39 @@
 #include "p6/p6.h"
 #include <cstdlib>
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <vector>
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest/doctest.h"
 #include "internal/imgui.hpp"
 
-static std::vector<FishData> getDataFromFish(std::vector<Fish> &fishs) {
-  std::vector<FishData> data;
+static std::vector<std::shared_ptr<FishData>>
+getDataFromFish(std::vector<std::shared_ptr<Fish>> &fishs) {
+  std::vector<std::shared_ptr<FishData>> data;
   data.reserve(fishs.size());
 
-  for (Fish &fish : fishs) {
-    data.emplace_back(fish.getData());
+  for (auto &fish : fishs) {
+    data.emplace_back(fish->getData());
   }
+
   return data;
 }
 
-void eatingTime(std::vector<Fish> &fishs, std::vector<Food> &foods) {
-  for (Fish &fish : fishs) {
-    if (fish.canEat()) {
-      for (Food &food : foods) {
-        if (glm::distance(food.getPosition(), fish.getData()._center) <
-            food.getHitbox()) {
-          fish.eats(food);
-          if (!fish.canEat()) {
-            break;
-          }
+static void eatingTime(std::vector<std::shared_ptr<Fish>> &fishs,
+                       std::vector<std::shared_ptr<Food>> &foods) {
+  for (auto &fish : fishs) {
+    if (!fish->canEat()) {
+      continue;
+    }
+
+    for (auto &food : foods) {
+      if (food->exists() &&
+          glm::distance(food->getPosition(), fish->getData()->_center) <
+              food->getHitbox()) {
+        fish->eats(food);
+        if (!fish->canEat()) {
+          break;
         }
       }
     }
@@ -57,18 +65,23 @@ int main(int argc, char *argv[]) {
   }
 
   // Actual app
-  auto ctx = p6::Context{{.title = "Simple-p6-Setup"}};
+  auto ctx = p6::Context{{.title = "NotOpenGL"}};
   ctx.maximize_window();
   Config::getInstance().ASPECT_RATIO = ctx.aspect_ratio();
 
-  std::vector<Fish> fishs = std::vector<Fish>(200);
+  std::vector<std::shared_ptr<Fish>> fishs;
+  fishs.reserve(30);
+
+  for (int i = 0; i < 10; i++) {
+    fishs.emplace_back(std::make_shared<Fish>());
+  }
 
   ctx.imgui = [&]() { imguiInit(); };
 
   ctx.mouse_pressed = [&](p6::MouseButton button) {
-    if (button.button == p6::Button::Left) {
-      Environment::getInstance().foods.emplace_back(
-          Food({button.position.x, button.position.y, 0}));
+    if (button.button == p6::Button::Right) {
+      Environment::getInstance().foods.emplace_back(std::make_shared<Food>(
+          glm::vec3{button.position.x, button.position.y, 0}));
     }
   };
 
@@ -78,13 +91,14 @@ int main(int argc, char *argv[]) {
 
     Environment::getInstance().fishData = getDataFromFish(fishs);
 
-    // Comparison square
-    // ctx.square(p6::Center{0, 0}, p6::Radius{1});
+    // Border rectangle
+    // ctx.rectangle(p6::TopLeftCorner{-Config::getInstance().ASPECT_RATIO, 1},
+    //              p6::Radii{2 * Config::getInstance().ASPECT_RATIO, 2});
 
-    for (Fish &fish : fishs) {
-      fish.draw(ctx);
-      fish.update();
-      fish.applyBehaviors(Environment::getInstance());
+    for (auto &fish : fishs) {
+      fish->applyBehaviors(Environment::getInstance());
+      fish->update();
+      fish->draw(ctx);
     }
 
     eatingTime(fishs, Environment::getInstance().foods);
@@ -92,11 +106,15 @@ int main(int argc, char *argv[]) {
     // Food
     Environment::getInstance().foods =
         filter(Environment::getInstance().foods,
-               Predicate<Food>([](Food &f) { return f.exists(); }));
+               Predicate<std::shared_ptr<Food>>(
+                   [](std::shared_ptr<Food> &f) { return f->exists(); }));
 
-    for (Food &food : Environment::getInstance().foods) {
-      if (food.exists()) {
-        food.draw(ctx);
+    std::cout << "remaining food : " << Environment::getInstance().foods.size()
+              << '\n';
+
+    for (auto &food : Environment::getInstance().foods) {
+      if (food->exists()) {
+        food->draw(ctx);
       }
     }
   };

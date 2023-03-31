@@ -3,6 +3,7 @@
 
 #include "Fish/FishData.hpp"
 #include "Food/Food.hpp"
+#include <memory>
 #include <vector>
 
 struct Environment {
@@ -12,8 +13,8 @@ private:
 public:
   Environment(Environment &other) = delete;
   Environment(Environment &&move) = delete;
-  std::vector<FishData> fishData;
-  std::vector<Food> foods;
+  std::vector<std::shared_ptr<FishData>> fishData;
+  std::vector<std::shared_ptr<Food>> foods;
 
   static Environment &getInstance() {
     static Environment INSTANCE;

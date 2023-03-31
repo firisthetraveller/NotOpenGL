@@ -4,6 +4,7 @@
 #include "Config.hpp"
 #include "Food/Food.hpp"
 #include "glm/fwd.hpp"
+#include <memory>
 #include <p6/p6.h>
 #include <sys/types.h>
 
@@ -26,9 +27,7 @@ public:
 
   bool isOutOfBounds() const;
   unsigned int getId() const { return _id; };
-  bool isNear(const FishData &other,
-              float distance = Config::getInstance().VISUAL_RANGE) const;
-  bool isNear(const Food &food,
+  bool isNear(const glm::vec3 &position, float otherSize = 0.f,
               float distance = Config::getInstance().VISUAL_RANGE) const;
 
   void teleport();

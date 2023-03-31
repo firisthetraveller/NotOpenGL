@@ -3,6 +3,7 @@
 
 #include "imgui.h"
 #include <array>
+
 struct Config {
 private:
   Config() = default;
@@ -22,8 +23,8 @@ public:
   float SPEED_LIMIT = 0.002f;
 
   // Wall detection
-  float WALL_MARGIN = 0.1f;
-  float WALL_TURN_FACTOR = 0.005f;
+  float WALL_MARGIN = 0.2f;
+  float WALL_TURN_FACTOR = 0.001f;
 
   // Food
   float DEFAULT_FOOD_SIZE = 0.01f;
