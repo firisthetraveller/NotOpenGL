@@ -11,6 +11,10 @@ private:
 public:
   Config(Config &other) = delete;
   Config(Config &&move) = delete;
+
+  // Simulation parameters
+  int FISH_COUNT = 10;
+
   float MIN_DISTANCE = 0.05f;
   float VISUAL_RANGE = 0.15f;
   float ASPECT_RATIO = 1.0f;

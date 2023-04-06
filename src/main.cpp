@@ -70,9 +70,9 @@ int main(int argc, char *argv[]) {
   Config::getInstance().ASPECT_RATIO = ctx.aspect_ratio();
 
   std::vector<std::shared_ptr<Fish>> fishs;
-  fishs.reserve(30);
+  fishs.reserve(Config::getInstance().FISH_COUNT);
 
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < Config::getInstance().FISH_COUNT; i++) {
     fishs.emplace_back(std::make_shared<Fish>());
   }
 
@@ -91,7 +91,7 @@ int main(int argc, char *argv[]) {
 
     Environment::getInstance().fishData = getDataFromFish(fishs);
 
-    // Border rectangle
+    // -- Border rectangle
     // ctx.rectangle(p6::TopLeftCorner{-Config::getInstance().ASPECT_RATIO, 1},
     //              p6::Radii{2 * Config::getInstance().ASPECT_RATIO, 2});
 
