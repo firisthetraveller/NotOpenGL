@@ -84,8 +84,9 @@ void Fish::draw(p6::Context &ctx) const {
   ctx.fill = {color[0], color[1], color[2], color[3]};
   ctx.use_stroke = true;
 
-  ctx.square(p6::Center{_data->_center}, _data->_radius,
-             p6::Rotation(p6::Angle{glm::vec2(_data->_movement)}));
+  ctx.equilateral_triangle(
+      p6::Center{_data->_center}, _data->_radius,
+      p6::Rotation(p6::Angle{glm::vec2(_data->_movement)}));
 
   if (Config::getInstance().SHOW_VISUAL_RANGES) {
     color = Config::getInstance().VISUAL_RANGE_COLOR;

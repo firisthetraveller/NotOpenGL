@@ -22,7 +22,7 @@ private:
 
 public:
   Fish(const glm::vec2 &center = p6::random::point(),
-       const p6::Radius &radius = p6::Radius{generate_range(0.005f, 0.0075f)},
+       const p6::Radius &radius = p6::Radius{generate_range(0.03f, 0.045f)},
        const p6::Rotation &rotation = p6::Rotation{},
        const glm::vec2 &movement = p6::random::direction() * 0.005f);
   Fish(const Fish &) = delete;
