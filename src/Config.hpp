@@ -13,7 +13,7 @@ public:
   Config(Config &&move) = delete;
 
   // Simulation parameters
-  int FISH_COUNT = 10;
+  int FISH_COUNT = 200;
 
   float MIN_DISTANCE = 0.05f;
   float VISUAL_RANGE = 0.15f;
@@ -22,7 +22,7 @@ public:
   // Behavior
   float COHESION_FACTOR = 0.001f;
   float ALIGNMENT_FACTOR = 0.05f;
-  float SEPARATION_FACTOR = 0.005f;
+  float SEPARATION_FACTOR = 0.025f;
 
   float SPEED_LIMIT = 0.002f;
 
@@ -45,9 +45,9 @@ public:
   std::array<float, 4> FOOD_COLOR = {1.f, 0.f, 0.f, 200.0f / 255.0f};
   std::array<float, 4> FOOD_FILL_COLOR = {1.f, 0.f, 0.f, 255.0f / 255.0f};
 
-  std::array<float, 4> VISUAL_RANGE_COLOR = {0.f, 0.f, 0.f, 200.0f / 255.0f};
+  std::array<float, 4> VISUAL_RANGE_COLOR = {0.f, 0.f, 0.f, 50.0f / 255.0f};
   std::array<float, 4> VISUAL_RANGE_FILL_COLOR = {
-      114.0f / 255.0f, 144.0f / 255.0f, 154.0f / 255.0f, 200.0f / 255.0f};
+      114.0f / 255.0f, 144.0f / 255.0f, 154.0f / 255.0f, 20.0f / 255.0f};
   std::array<float, 4> MOVEMENT_RANGE_COLOR = {0.f, 0.f, 0.f, 200.0f / 255.0f};
 
   static Config &getInstance() {

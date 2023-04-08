@@ -18,7 +18,7 @@ inline void imguiInit() {
 
   if (ImGui::CollapsingHeader("Behavior parameters")) {
     ImGui::SliderFloat("Separation", &Config::getInstance().SEPARATION_FACTOR,
-                       0.f, 0.01f);
+                       0.f, 0.05f);
     ImGui::SliderFloat("Alignment", &Config::getInstance().ALIGNMENT_FACTOR,
                        0.f, 0.1f);
     ImGui::SliderFloat("Cohesion", &Config::getInstance().COHESION_FACTOR, 0.f,
