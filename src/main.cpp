@@ -1,21 +1,24 @@
-#include "Behavior.hpp"
-#include "Config.hpp"
-#include "Environment.hpp"
-#include "Fish/Fish.hpp"
-#include "Fish/FishData.hpp"
-#include "Food/Food.hpp"
 #include "glm/fwd.hpp"
 #include "imgui.h"
-#include "internal/stream.hpp"
 #include "p6/p6.h"
 #include <cstdlib>
 #include <functional>
 #include <iostream>
 #include <memory>
 #include <vector>
+
+#include "Behavior.hpp"
+#include "Config.hpp"
+#include "Environment.hpp"
+#include "Fish/Fish.hpp"
+#include "Fish/FishData.hpp"
+#include "Food/Food.hpp"
+
 #define DOCTEST_CONFIG_IMPLEMENT
 #include "doctest/doctest.h"
+#include "internal/geometry.hpp"
 #include "internal/imgui.hpp"
+#include "internal/stream.hpp"
 
 static std::vector<std::shared_ptr<FishData>>
 getDataFromFish(std::vector<std::shared_ptr<Fish>> &fishs) {
@@ -38,8 +41,9 @@ static void eatingTime(std::vector<std::shared_ptr<Fish>> &fishs,
 
     for (auto &food : foods) {
       if (food->exists() &&
-          glm::distance(food->getPosition(), fish->getData()->_center) <
+          Geometry::distance2D(food->getPosition(), fish->getData()->_center) <
               food->getHitbox()) {
+        // std::cout << "nom nom nom\n";
         fish->eats(food);
         if (!fish->canEat()) {
           break;
@@ -91,7 +95,7 @@ int main(int argc, char *argv[]) {
 
     Environment::getInstance().fishData = getDataFromFish(fishs);
 
-    // -- Border rectangle
+    // -- Debug -- Border rectangle
     // ctx.rectangle(p6::TopLeftCorner{-Config::getInstance().ASPECT_RATIO, 1},
     //              p6::Radii{2 * Config::getInstance().ASPECT_RATIO, 2});
 
@@ -103,14 +107,16 @@ int main(int argc, char *argv[]) {
 
     eatingTime(fishs, Environment::getInstance().foods);
 
+    // -- Debug -- Check food HP
+    // for (auto food : Environment::getInstance().foods) {
+    //   std::cout << "Food HP: " << food->getRemainingBites() << '\n';
+    // }
+
     // Food
     Environment::getInstance().foods =
         filter(Environment::getInstance().foods,
                Predicate<std::shared_ptr<Food>>(
                    [](std::shared_ptr<Food> &f) { return f->exists(); }));
-
-    std::cout << "remaining food : " << Environment::getInstance().foods.size()
-              << '\n';
 
     for (auto &food : Environment::getInstance().foods) {
       if (food->exists()) {

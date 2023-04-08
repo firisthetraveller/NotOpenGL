@@ -1,10 +1,6 @@
 #ifndef __BEHAVIOR__
 #define __BEHAVIOR__
 
-#include "Config.hpp"
-#include "Environment.hpp"
-#include "Fish/FishData.hpp"
-#include "Food/Food.hpp"
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include "glm/gtx/quaternion.hpp"
@@ -15,12 +11,15 @@
 #include <numeric>
 #include <vector>
 
+#include "Config.hpp"
+#include "Environment.hpp"
+#include "Fish/FishData.hpp"
+#include "Food/Food.hpp"
+
+#include "internal/geometry.hpp"
+
 using Behavior =
     std::function<void(std::shared_ptr<FishData> &, Environment &)>;
-
-static float notXSq(float value) {
-  return 1 - float(std::pow((value - 1), 32));
-}
 
 class BehaviorFactory {
 public:
@@ -35,7 +34,7 @@ public:
     return [&](std::shared_ptr<FishData> &fish, Environment &) {
       if (glm::length(fish->_movement) <
           Config::getInstance().SPEED_LIMIT / 3) {
-        fish->_movement = glm::vec3(p6::random::direction(), 0);
+        fish->_movement += glm::vec3(p6::random::direction(), 0);
       }
     };
   }
@@ -80,19 +79,17 @@ public:
           continue;
         }
 
-        float distance = glm::distance(glm::vec2(food->getPosition()),
-                                       glm::vec2(fish->_center)) -
-                         food->getHitbox();
+        float distance =
+            Geometry::distance2D(food->getPosition(), fish->_center) -
+            food->getHitbox();
         if (distance < Config::getInstance().VISUAL_RANGE) {
           map.emplace_back(food, distance);
         }
       }
 
       if (map.empty()) {
-        std::cout << "map empty" << '\n';
         return;
       }
-      std::cout << "map not empty" << '\n';
 
       // Minimum
       auto min = std::accumulate(
@@ -108,12 +105,14 @@ public:
 
       // Overload movement
       if (fish->isNear(min.first->getPosition(), min.first->getHitbox())) {
-        auto movement = min.first->getPosition() - fish->_center;
+        float speed = glm::length(fish->_movement);
+        auto movement = (min.first->getPosition() - fish->_center);
+        movement *= (32.0f / glm::length(movement)) * speed;
         // std::cout << glm::length(movement) << " - "
         //           << notXSq(glm::length(movement)) / glm::length(movement)
         //           << '\n';
-        fish->_movement =
-            movement * (notXSq(glm::length(movement)) / glm::length(movement));
+        fish->_movement.x += movement.x;
+        fish->_movement.y += movement.y;
         // std::cout << "Food detected !" << '\n';
       }
       // std::cout << "Food seeking" << '\n';

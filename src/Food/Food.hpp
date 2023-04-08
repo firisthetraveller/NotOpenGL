@@ -17,6 +17,7 @@ public:
                 float radius = Config::getInstance().DEFAULT_FOOD_SIZE);
 
   bool exists() const { return _remainingBites > 0; }
+  int getRemainingBites() const { return _remainingBites; }
   glm::vec3 getPosition() const { return _position; }
   float getHitbox() const { return _radius; }
   void getsBitten() { _remainingBites -= 1; }
