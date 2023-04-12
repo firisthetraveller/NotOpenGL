@@ -69,8 +69,8 @@ void Fish::showId() { std::cout << _data->getId() << '\n'; }
 
 void Fish::eats(std::shared_ptr<Food> &food) {
   _eatingCooldown =
-      std::max(Config::getInstance().FOOD_COOLDOWN_FRAMES,
-               _eatingCooldown + Config::getInstance().FOOD_COOLDOWN_FRAMES);
+      std::max(Config::get().FOOD_COOLDOWN_FRAMES,
+               _eatingCooldown + Config::get().FOOD_COOLDOWN_FRAMES);
   food->getsBitten();
 }
 
@@ -80,7 +80,7 @@ void Fish::draw(p6::Context &ctx) const {
   float base_stroke_weight = ctx.stroke_weight;
 
   // showId();
-  auto color = Config::getInstance().FISH_COLOR_1;
+  auto color = Config::get().FISH_COLOR_1;
   ctx.stroke = {color[0], color[1], color[2], color[3]};
   ctx.fill = {color[0], color[1], color[2], color[3]};
   ctx.use_stroke = true;
@@ -89,19 +89,19 @@ void Fish::draw(p6::Context &ctx) const {
       p6::Center{_data->_center}, _data->_radius,
       p6::Rotation(p6::Angle{glm::vec2(_data->_movement)}));
 
-  if (Config::getInstance().SHOW_VISUAL_RANGES) {
-    color = Config::getInstance().VISUAL_RANGE_COLOR;
+  if (Config::get().SHOW_VISUAL_RANGES) {
+    color = Config::get().VISUAL_RANGE_COLOR;
     ctx.stroke = {color[0], color[1], color[2], color[3]};
-    color = Config::getInstance().VISUAL_RANGE_FILL_COLOR;
+    color = Config::get().VISUAL_RANGE_FILL_COLOR;
     ctx.fill = {color[0], color[1], color[2], color[3]};
     ctx.use_stroke = true;
     ctx.stroke_weight = base_stroke_weight / 10.f;
-    ctx.circle(p6::Center{_data->_center}, Config::getInstance().VISUAL_RANGE);
+    ctx.circle(p6::Center{_data->_center}, Config::get().VISUAL_RANGE);
   }
 
   // Draw vision vector
-  if (Config::getInstance().SHOW_MOVEMENT_VECTOR) {
-    color = Config::getInstance().MOVEMENT_RANGE_COLOR;
+  if (Config::get().SHOW_MOVEMENT_VECTOR) {
+    color = Config::get().MOVEMENT_RANGE_COLOR;
     ctx.stroke = {color[0], color[1], color[2], color[3]};
     ctx.use_stroke = true;
     ctx.stroke_weight = base_stroke_weight / 10.f;

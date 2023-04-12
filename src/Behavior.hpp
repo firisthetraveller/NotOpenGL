@@ -32,8 +32,7 @@ public:
 
   static Behavior alwaysActive() {
     return [&](std::shared_ptr<FishData> &fish, Environment &) {
-      if (glm::length(fish->_movement) <
-          Config::getInstance().SPEED_LIMIT / 3) {
+      if (glm::length(fish->_movement) < Config::get().SPEED_LIMIT / 3) {
         fish->_movement += glm::vec3(p6::random::direction(), 0);
       }
     };
@@ -41,19 +40,19 @@ public:
 
   static Behavior wallAvoidance() {
     return [&](std::shared_ptr<FishData> &fish, Environment &) {
-      if (fish->_center.x < -Config::getInstance().ASPECT_RATIO +
-                                Config::getInstance().WALL_MARGIN) {
-        fish->_movement.x += Config::getInstance().WALL_TURN_FACTOR;
+      if (fish->_center.x <
+          -Config::get().ASPECT_RATIO + Config::get().WALL_MARGIN) {
+        fish->_movement.x += Config::get().WALL_TURN_FACTOR;
       }
-      if (fish->_center.x > Config::getInstance().ASPECT_RATIO -
-                                Config::getInstance().WALL_MARGIN) {
-        fish->_movement.x -= Config::getInstance().WALL_TURN_FACTOR;
+      if (fish->_center.x >
+          Config::get().ASPECT_RATIO - Config::get().WALL_MARGIN) {
+        fish->_movement.x -= Config::get().WALL_TURN_FACTOR;
       }
-      if (fish->_center.y < -1 + Config::getInstance().WALL_MARGIN) {
-        fish->_movement.y += Config::getInstance().WALL_TURN_FACTOR;
+      if (fish->_center.y < -1 + Config::get().WALL_MARGIN) {
+        fish->_movement.y += Config::get().WALL_TURN_FACTOR;
       }
-      if (fish->_center.y > 1 - Config::getInstance().WALL_MARGIN) {
-        fish->_movement.y -= Config::getInstance().WALL_TURN_FACTOR;
+      if (fish->_center.y > 1 - Config::get().WALL_MARGIN) {
+        fish->_movement.y -= Config::get().WALL_TURN_FACTOR;
       }
       // std::cout << "Wall avoidance" << '\n';
     };
@@ -63,8 +62,8 @@ public:
     return [&](std::shared_ptr<FishData> &fish, Environment &) {
       float speed = glm::length(fish->_movement);
 
-      if (speed > Config::getInstance().SPEED_LIMIT) {
-        fish->_movement *= Config::getInstance().SPEED_LIMIT / speed;
+      if (speed > Config::get().SPEED_LIMIT) {
+        fish->_movement *= Config::get().SPEED_LIMIT / speed;
       }
       // std::cout << "Speed limiter" << '\n';
     };
@@ -82,7 +81,7 @@ public:
         float distance =
             Geometry::distance2D(food->getPosition(), fish->_center) -
             food->getHitbox();
-        if (distance < Config::getInstance().VISUAL_RANGE) {
+        if (distance < Config::get().VISUAL_RANGE) {
           map.emplace_back(food, distance);
         }
       }
@@ -99,7 +98,7 @@ public:
             return (one.second < other.second) ? one : other;
           });
 
-      // std::cout << min.second << " - " << Config::getInstance().VISUAL_RANGE
+      // std::cout << min.second << " - " << Config::get().VISUAL_RANGE
       //           << '\n';
       // std::cout << "Fish is near? : " << fish.isNear(min.first) << '\n';
 
@@ -136,7 +135,7 @@ public:
       if (neighbors != 0) {
         center /= neighbors;
         fish->_movement +=
-            (center - fish->_center) * Config::getInstance().COHESION_FACTOR;
+            (center - fish->_center) * Config::get().COHESION_FACTOR;
       }
 
       // std::cout << "Cohesion" << '\n';
@@ -148,14 +147,13 @@ public:
       glm::vec3 movement(0);
       for (auto &other : env.fishData) {
         if (!(other.get() == fish.get())) {
-          if (fish->isNear(other->_center, 0.0f,
-                           Config::getInstance().MIN_DISTANCE)) {
+          if (fish->isNear(other->_center, 0.0f, Config::get().MIN_DISTANCE)) {
             movement += fish->_center - other->_center;
           }
         }
       }
 
-      fish->_movement += movement * Config::getInstance().SEPARATION_FACTOR;
+      fish->_movement += movement * Config::get().SEPARATION_FACTOR;
 
       // std::cout << "Separation" << '\n';
     };
@@ -177,8 +175,7 @@ public:
 
       if (neighbors != 0) {
         alignmentVector /= neighbors;
-        fish->_movement +=
-            alignmentVector * Config::getInstance().ALIGNMENT_FACTOR;
+        fish->_movement += alignmentVector * Config::get().ALIGNMENT_FACTOR;
       }
 
       // std::cout << "Alignment" << '\n';
@@ -190,15 +187,14 @@ public:
       glm::vec3 movement(0);
       for (auto &other : env.obstacles) {
         if (fish->isNear(other->_center, 0.0f,
-                         Config::getInstance().OBSTACLE_DETECTION_RADIUS)) {
+                         Config::get().OBSTACLE_DETECTION_RADIUS)) {
           movement += (fish->_center - other->_center) *
                       (other->_radius /
                        Geometry::distance2D(fish->_center, other->_center));
         }
       }
 
-      fish->_movement +=
-          movement * Config::getInstance().OBSTACLE_AVOIDANCE_FACTOR;
+      fish->_movement += movement * Config::get().OBSTACLE_AVOIDANCE_FACTOR;
     };
   }
 

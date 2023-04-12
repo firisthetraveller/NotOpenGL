@@ -26,16 +26,14 @@ TEST_CASE("Boids are generated in the pond") {
 TEST_CASE("Boids can detect each other") {
   std::shared_ptr<Fish> fish = std::make_shared<Fish>();
   std::shared_ptr<Fish> fish2 = std::make_shared<Fish>(
-      glm::vec2{fish->getData()->_center.x +
-                    Config::getInstance().VISUAL_RANGE / 2,
+      glm::vec2{fish->getData()->_center.x + Config::get().VISUAL_RANGE / 2,
                 fish->getData()->_center.y},
       fish->getData()->_radius, fish->getData()->_rotation);
 
   CHECK((fish->isNear(fish2)));
 
   std::shared_ptr<Fish> fish3 = std::make_shared<Fish>(
-      glm::vec2{fish->getData()->_center.x +
-                    2 * Config::getInstance().VISUAL_RANGE,
+      glm::vec2{fish->getData()->_center.x + 2 * Config::get().VISUAL_RANGE,
                 fish->getData()->_center.y},
       fish->getData()->_radius, fish->getData()->_rotation);
   CHECK((!fish->isNear(fish3)));

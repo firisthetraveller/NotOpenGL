@@ -17,18 +17,18 @@ public:
   int OBSTACLE_COUNT = 5;
 
   float MIN_DISTANCE = 0.05f;
-  float VISUAL_RANGE = 0.15f;
+  float VISUAL_RANGE = 0.2f;
   float ASPECT_RATIO = 1.0f;
 
   // Behavior
   float COHESION_FACTOR = 0.001f;
   float ALIGNMENT_FACTOR = 0.05f;
   float SEPARATION_FACTOR = 0.025f;
-  float OBSTACLE_AVOIDANCE_FACTOR = 0.15f;
+  float OBSTACLE_AVOIDANCE_FACTOR = 0.04f;
 
-  float OBSTACLE_DETECTION_RADIUS = 0.15f;
+  float OBSTACLE_DETECTION_RADIUS = 0.25f;
 
-  float SPEED_LIMIT = 0.002f;
+  float SPEED_LIMIT = 0.005f;
 
   // Wall detection
   float WALL_MARGIN = 0.2f;
@@ -40,8 +40,8 @@ public:
   int FOOD_COOLDOWN_FRAMES = 60;
 
   // Visual indicators
-  bool SHOW_VISUAL_RANGES = true;
-  bool SHOW_MOVEMENT_VECTOR = true;
+  bool SHOW_VISUAL_RANGES = false;
+  bool SHOW_MOVEMENT_VECTOR = false;
 
   // Style
   std::array<float, 4> FISH_COLOR_1 = {0.f, 0.f, 0.f, 200.0f / 255.0f};
@@ -58,7 +58,7 @@ public:
       114.0f / 255.0f, 144.0f / 255.0f, 154.0f / 255.0f, 20.0f / 255.0f};
   std::array<float, 4> MOVEMENT_RANGE_COLOR = {0.f, 0.f, 0.f, 200.0f / 255.0f};
 
-  static Config &getInstance() {
+  static Config &get() {
     static Config INSTANCE;
 
     return INSTANCE;

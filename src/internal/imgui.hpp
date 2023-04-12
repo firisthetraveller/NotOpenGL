@@ -8,41 +8,32 @@ inline void imguiInit() {
   ImGui::Begin("Parameters");
 
   if (ImGui::CollapsingHeader("Boid parameters")) {
-    ImGui::SliderFloat("Visual range", &Config::getInstance().VISUAL_RANGE, 0.f,
-                       0.3f);
-    ImGui::SliderFloat("Vital space", &Config::getInstance().MIN_DISTANCE, 0.f,
-                       0.1f);
-    ImGui::SliderFloat("Speed limit", &Config::getInstance().SPEED_LIMIT, 0.f,
-                       0.01f);
+    ImGui::SliderFloat("Visual range", &Config::get().VISUAL_RANGE, 0.f, 0.4f);
+    ImGui::SliderFloat("Vital space", &Config::get().MIN_DISTANCE, 0.f, 0.1f);
+    ImGui::SliderFloat("Speed limit", &Config::get().SPEED_LIMIT, 0.f, 0.01f);
   }
 
   if (ImGui::CollapsingHeader("Behavior parameters")) {
-    ImGui::SliderFloat("Separation", &Config::getInstance().SEPARATION_FACTOR,
-                       0.f, 0.05f);
-    ImGui::SliderFloat("Alignment", &Config::getInstance().ALIGNMENT_FACTOR,
-                       0.f, 0.1f);
-    ImGui::SliderFloat("Cohesion", &Config::getInstance().COHESION_FACTOR, 0.f,
-                       0.005f);
+    ImGui::SliderFloat("Separation", &Config::get().SEPARATION_FACTOR, 0.f,
+                       0.05f);
+    ImGui::SliderFloat("Alignment", &Config::get().ALIGNMENT_FACTOR, 0.f, 0.1f);
+    ImGui::SliderFloat("Cohesion", &Config::get().COHESION_FACTOR, 0.f, 0.005f);
     ImGui::SliderFloat("Obstacle avoidance",
-                       &Config::getInstance().OBSTACLE_AVOIDANCE_FACTOR, 0.f,
-                       0.3f);
+                       &Config::get().OBSTACLE_AVOIDANCE_FACTOR, 0.f, 0.08f);
     ImGui::SliderFloat("Obstacle detection",
-                       &Config::getInstance().OBSTACLE_DETECTION_RADIUS, 0.f,
-                       0.3f);
+                       &Config::get().OBSTACLE_DETECTION_RADIUS, 0.f, 0.6f);
   }
 
   if (ImGui::CollapsingHeader("Wall avoidance parameters")) {
-    ImGui::SliderFloat("Wall margin", &Config::getInstance().WALL_MARGIN, 0.f,
-                       0.4f);
-    ImGui::SliderFloat("Wall turn", &Config::getInstance().WALL_TURN_FACTOR,
-                       0.f, 0.002f);
+    ImGui::SliderFloat("Wall margin", &Config::get().WALL_MARGIN, 0.f, 0.4f);
+    ImGui::SliderFloat("Wall turn", &Config::get().WALL_TURN_FACTOR, 0.f,
+                       0.002f);
   }
 
   if (ImGui::CollapsingHeader("Debug")) {
-    ImGui::Checkbox("Show visual ranges",
-                    &Config::getInstance().SHOW_VISUAL_RANGES);
+    ImGui::Checkbox("Show visual ranges", &Config::get().SHOW_VISUAL_RANGES);
     ImGui::Checkbox("Show movement vector",
-                    &Config::getInstance().SHOW_MOVEMENT_VECTOR);
+                    &Config::get().SHOW_MOVEMENT_VECTOR);
   }
 
   if (ImGui::CollapsingHeader("Colors")) {
@@ -59,28 +50,22 @@ inline void imguiInit() {
              : (alpha_preview ? ImGuiColorEditFlags_AlphaPreview : 0)) |
         (options_menu ? 0 : ImGuiColorEditFlags_NoOptions);
 
-    ImGui::ColorEdit4("Fish type #1", Config::getInstance().FISH_COLOR_1.data(),
+    ImGui::ColorEdit4("Fish type #1", Config::get().FISH_COLOR_1.data(),
                       misc_flags);
 
-    ImGui::ColorEdit4("Food", Config::getInstance().FOOD_COLOR.data(),
+    ImGui::ColorEdit4("Food", Config::get().FOOD_COLOR.data(), misc_flags);
+    ImGui::ColorEdit4("Food - Fill", Config::get().FOOD_FILL_COLOR.data(),
                       misc_flags);
-    ImGui::ColorEdit4("Food - Fill",
-                      Config::getInstance().FOOD_FILL_COLOR.data(), misc_flags);
-    ImGui::ColorEdit4("Obstacle",
-                      Config::getInstance().OBSTACLE_STROKE_COLOR.data(),
+    ImGui::ColorEdit4("Obstacle", Config::get().OBSTACLE_STROKE_COLOR.data(),
                       misc_flags);
     ImGui::ColorEdit4("Obstacle - Fill",
-                      Config::getInstance().OBSTACLE_FILL_COLOR.data(),
-                      misc_flags);
-    ImGui::ColorEdit4("Visual range",
-                      Config::getInstance().VISUAL_RANGE_COLOR.data(),
+                      Config::get().OBSTACLE_FILL_COLOR.data(), misc_flags);
+    ImGui::ColorEdit4("Visual range", Config::get().VISUAL_RANGE_COLOR.data(),
                       misc_flags);
     ImGui::ColorEdit4("Visual range - Fill",
-                      Config::getInstance().VISUAL_RANGE_FILL_COLOR.data(),
-                      misc_flags);
+                      Config::get().VISUAL_RANGE_FILL_COLOR.data(), misc_flags);
     ImGui::ColorEdit4("Movement range",
-                      Config::getInstance().MOVEMENT_RANGE_COLOR.data(),
-                      misc_flags);
+                      Config::get().MOVEMENT_RANGE_COLOR.data(), misc_flags);
   }
   ImGui::End();
 

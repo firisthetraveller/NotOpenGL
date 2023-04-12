@@ -13,7 +13,7 @@ static bool isOutOfBoundCoord(float coordinate, float limit = 1.0) {
 }
 
 bool FishData::isOutOfBounds() const {
-  return isOutOfBoundCoord(_center.x, Config::getInstance().ASPECT_RATIO) ||
+  return isOutOfBoundCoord(_center.x, Config::get().ASPECT_RATIO) ||
          isOutOfBoundCoord(_center.y);
 }
 
@@ -33,9 +33,8 @@ bool FishData::isNear(const glm::vec3 &otherPosition, float otherSize,
 }
 
 void FishData::teleport() {
-  _center =
-      glm::vec3(glm::vec2(teleportIfOutOfBounds(
-                              _center.x, Config::getInstance().ASPECT_RATIO),
-                          teleportIfOutOfBounds(_center.y)),
-                1);
+  _center = glm::vec3(
+      glm::vec2(teleportIfOutOfBounds(_center.x, Config::get().ASPECT_RATIO),
+                teleportIfOutOfBounds(_center.y)),
+      1);
 }

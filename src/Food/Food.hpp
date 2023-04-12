@@ -14,7 +14,7 @@ private:
 
 public:
   explicit Food(glm::vec3 position = {},
-                float radius = Config::getInstance().DEFAULT_FOOD_SIZE);
+                float radius = Config::get().DEFAULT_FOOD_SIZE);
 
   bool exists() const { return _remainingBites > 0; }
   int getRemainingBites() const { return _remainingBites; }

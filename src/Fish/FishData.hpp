@@ -28,7 +28,7 @@ public:
   bool isOutOfBounds() const;
   unsigned int getId() const { return _id; };
   bool isNear(const glm::vec3 &position, float otherSize = 0.f,
-              float distance = Config::getInstance().VISUAL_RANGE) const;
+              float distance = Config::get().VISUAL_RANGE) const;
 
   void teleport();
 };

@@ -6,9 +6,9 @@ Obstacle::Obstacle(glm::vec2 center, float radius)
 
 void Obstacle::draw(p6::Context &ctx) const {
   float baseStrokeWeight = ctx.stroke_weight;
-  auto color = Config::getInstance().OBSTACLE_STROKE_COLOR;
+  auto color = Config::get().OBSTACLE_STROKE_COLOR;
   ctx.stroke = {color[0], color[1], color[2], color[3]};
-  color = Config::getInstance().OBSTACLE_FILL_COLOR;
+  color = Config::get().OBSTACLE_FILL_COLOR;
   ctx.fill = {color[0], color[1], color[2], color[3]};
   ctx.use_stroke = true;
   ctx.stroke_weight = baseStrokeWeight / 10.f;

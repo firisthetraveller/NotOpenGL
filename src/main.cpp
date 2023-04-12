@@ -83,11 +83,11 @@ int main(int argc, char *argv[]) {
   // Actual app
   auto ctx = p6::Context{{.title = "NotOpenGL"}};
   ctx.maximize_window();
-  Config::getInstance().ASPECT_RATIO = ctx.aspect_ratio();
+  Config::get().ASPECT_RATIO = ctx.aspect_ratio();
 
-  auto fishs = generate<Fish>(Config::getInstance().FISH_COUNT);
+  auto fishs = generate<Fish>(Config::get().FISH_COUNT);
   Environment::getInstance().obstacles =
-      generate<Obstacle>(Config::getInstance().OBSTACLE_COUNT);
+      generate<Obstacle>(Config::get().OBSTACLE_COUNT);
 
   ctx.imgui = [&]() { imguiInit(); };
 
@@ -105,8 +105,8 @@ int main(int argc, char *argv[]) {
     Environment::getInstance().fishData = getDataFromFish(fishs);
 
     // -- Debug -- Border rectangle
-    // ctx.rectangle(p6::TopLeftCorner{-Config::getInstance().ASPECT_RATIO, 1},
-    //              p6::Radii{2 * Config::getInstance().ASPECT_RATIO, 2});
+    // ctx.rectangle(p6::TopLeftCorner{-Config::get().ASPECT_RATIO, 1},
+    //              p6::Radii{2 * Config::get().ASPECT_RATIO, 2});
 
     for (auto &fish : fishs) {
       fish->applyBehaviors(Environment::getInstance());
@@ -114,7 +114,7 @@ int main(int argc, char *argv[]) {
       fish->draw(ctx);
     }
 
-    for (auto obstacle : Environment::getInstance().obstacles) {
+    for (const auto &obstacle : Environment::getInstance().obstacles) {
       obstacle->draw(ctx);
     }
 
