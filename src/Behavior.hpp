@@ -162,7 +162,7 @@ public:
   }
 
   static Behavior alignment() {
-    return [](std::shared_ptr<FishData> &fish, Environment &env) {
+    return [&](std::shared_ptr<FishData> &fish, Environment &env) {
       unsigned int neighbors = 0;
       glm::vec3 alignmentVector(0);
 
@@ -182,6 +182,29 @@ public:
       }
 
       // std::cout << "Alignment" << '\n';
+    };
+  }
+
+  static Behavior avoidObstacles() {
+    return [&](std::shared_ptr<FishData> &fish, Environment &env) {
+      glm::vec3 movement(0);
+      for (auto &other : env.obstacles) {
+        if (fish->isNear(other->_center, 0.0f,
+                         Config::getInstance().OBSTACLE_DETECTION_RADIUS)) {
+          movement += (fish->_center - other->_center) *
+                      (other->_radius /
+                       Geometry::distance2D(fish->_center, other->_center));
+        }
+      }
+
+      fish->_movement +=
+          movement * Config::getInstance().OBSTACLE_AVOIDANCE_FACTOR;
+    };
+  }
+
+  static Behavior fleePredators() {
+    return [&](std::shared_ptr<FishData> &, Environment &) {
+      // std::cout << "Separation" << '\n';
     };
   }
 };

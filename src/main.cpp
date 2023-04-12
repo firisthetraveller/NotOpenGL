@@ -1,3 +1,4 @@
+#include "Obstacle/Obstacle.hpp"
 #include "glm/fwd.hpp"
 #include "imgui.h"
 #include "p6/p6.h"
@@ -53,6 +54,17 @@ static void eatingTime(std::vector<std::shared_ptr<Fish>> &fishs,
   }
 }
 
+template <typename T> std::vector<std::shared_ptr<T>> generate(int count) {
+  std::vector<std::shared_ptr<T>> vec;
+  vec.reserve(count);
+
+  for (int i = 0; i < count; i++) {
+    vec.emplace_back(std::make_shared<T>());
+  }
+
+  return vec;
+}
+
 int main(int argc, char *argv[]) {
   { // Run the tests
     if (doctest::Context{}.run() != 0) {
@@ -73,12 +85,9 @@ int main(int argc, char *argv[]) {
   ctx.maximize_window();
   Config::getInstance().ASPECT_RATIO = ctx.aspect_ratio();
 
-  std::vector<std::shared_ptr<Fish>> fishs;
-  fishs.reserve(Config::getInstance().FISH_COUNT);
-
-  for (int i = 0; i < Config::getInstance().FISH_COUNT; i++) {
-    fishs.emplace_back(std::make_shared<Fish>());
-  }
+  auto fishs = generate<Fish>(Config::getInstance().FISH_COUNT);
+  Environment::getInstance().obstacles =
+      generate<Obstacle>(Config::getInstance().OBSTACLE_COUNT);
 
   ctx.imgui = [&]() { imguiInit(); };
 
@@ -103,6 +112,10 @@ int main(int argc, char *argv[]) {
       fish->applyBehaviors(Environment::getInstance());
       fish->update();
       fish->draw(ctx);
+    }
+
+    for (auto obstacle : Environment::getInstance().obstacles) {
+      obstacle->draw(ctx);
     }
 
     eatingTime(fishs, Environment::getInstance().foods);

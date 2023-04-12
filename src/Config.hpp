@@ -14,6 +14,7 @@ public:
 
   // Simulation parameters
   int FISH_COUNT = 200;
+  int OBSTACLE_COUNT = 5;
 
   float MIN_DISTANCE = 0.05f;
   float VISUAL_RANGE = 0.15f;
@@ -23,6 +24,9 @@ public:
   float COHESION_FACTOR = 0.001f;
   float ALIGNMENT_FACTOR = 0.05f;
   float SEPARATION_FACTOR = 0.025f;
+  float OBSTACLE_AVOIDANCE_FACTOR = 0.15f;
+
+  float OBSTACLE_DETECTION_RADIUS = 0.15f;
 
   float SPEED_LIMIT = 0.002f;
 
@@ -44,6 +48,10 @@ public:
 
   std::array<float, 4> FOOD_COLOR = {1.f, 0.f, 0.f, 200.0f / 255.0f};
   std::array<float, 4> FOOD_FILL_COLOR = {1.f, 0.f, 0.f, 255.0f / 255.0f};
+
+  std::array<float, 4> OBSTACLE_STROKE_COLOR = {0.f, 0.f, 0.f, 200.0f / 255.0f};
+  std::array<float, 4> OBSTACLE_FILL_COLOR = {0.5f, 0.5f, 0.5f,
+                                              255.0f / 255.0f};
 
   std::array<float, 4> VISUAL_RANGE_COLOR = {0.f, 0.f, 0.f, 50.0f / 255.0f};
   std::array<float, 4> VISUAL_RANGE_FILL_COLOR = {

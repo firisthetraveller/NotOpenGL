@@ -23,6 +23,12 @@ inline void imguiInit() {
                        0.f, 0.1f);
     ImGui::SliderFloat("Cohesion", &Config::getInstance().COHESION_FACTOR, 0.f,
                        0.005f);
+    ImGui::SliderFloat("Obstacle avoidance",
+                       &Config::getInstance().OBSTACLE_AVOIDANCE_FACTOR, 0.f,
+                       0.3f);
+    ImGui::SliderFloat("Obstacle detection",
+                       &Config::getInstance().OBSTACLE_DETECTION_RADIUS, 0.f,
+                       0.3f);
   }
 
   if (ImGui::CollapsingHeader("Wall avoidance parameters")) {
@@ -60,6 +66,12 @@ inline void imguiInit() {
                       misc_flags);
     ImGui::ColorEdit4("Food - Fill",
                       Config::getInstance().FOOD_FILL_COLOR.data(), misc_flags);
+    ImGui::ColorEdit4("Obstacle",
+                      Config::getInstance().OBSTACLE_STROKE_COLOR.data(),
+                      misc_flags);
+    ImGui::ColorEdit4("Obstacle - Fill",
+                      Config::getInstance().OBSTACLE_FILL_COLOR.data(),
+                      misc_flags);
     ImGui::ColorEdit4("Visual range",
                       Config::getInstance().VISUAL_RANGE_COLOR.data(),
                       misc_flags);

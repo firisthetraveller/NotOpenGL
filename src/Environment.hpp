@@ -3,6 +3,8 @@
 
 #include "Fish/FishData.hpp"
 #include "Food/Food.hpp"
+#include "Obstacle/Obstacle.hpp"
+
 #include <memory>
 #include <vector>
 
@@ -15,6 +17,7 @@ public:
   Environment(Environment &&move) = delete;
   std::vector<std::shared_ptr<FishData>> fishData;
   std::vector<std::shared_ptr<Food>> foods;
+  std::vector<std::shared_ptr<Obstacle>> obstacles;
 
   static Environment &getInstance() {
     static Environment INSTANCE;
