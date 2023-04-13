@@ -1,7 +1,6 @@
 #include "FishData.hpp"
 #include "Config.hpp"
 #include "glm/fwd.hpp"
-#include <memory>
 
 FishData::FishData(unsigned int id, glm::vec3 center, p6::Radius radius,
                    p6::Rotation rotation, glm::vec3 movement)
