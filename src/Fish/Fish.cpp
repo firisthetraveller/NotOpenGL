@@ -7,6 +7,7 @@
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include "glm/gtx/norm.hpp"
+#include "internal/graphics.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -77,39 +78,35 @@ void Fish::eats(std::shared_ptr<Food> &food) {
 bool Fish::canEat() const { return _eatingCooldown < 0; }
 
 void Fish::draw(p6::Context &ctx) const {
-  float base_stroke_weight = ctx.stroke_weight;
-
-  // showId();
-  auto color = Config::get().FISH_COLOR_1;
-  ctx.stroke = {color[0], color[1], color[2], color[3]};
-  ctx.fill = {color[0], color[1], color[2], color[3]};
-  ctx.use_stroke = true;
-
-  ctx.equilateral_triangle(
-      p6::Center{_data->_center}, _data->_radius,
-      p6::Rotation(p6::Angle{glm::vec2(_data->_movement)}));
+  Graphics::draw(
+      ctx,
+      [&]() {
+        ctx.equilateral_triangle(
+            p6::Center{_data->_center}, _data->_radius,
+            p6::Rotation(p6::Angle{glm::vec2(_data->_movement)}));
+      },
+      {0, 0, 0, 0}, Config::get().FISH_COLOR_1);
 
   if (Config::get().SHOW_VISUAL_RANGES) {
-    color = Config::get().VISUAL_RANGE_COLOR;
-    ctx.stroke = {color[0], color[1], color[2], color[3]};
-    color = Config::get().VISUAL_RANGE_FILL_COLOR;
-    ctx.fill = {color[0], color[1], color[2], color[3]};
-    ctx.use_stroke = true;
-    ctx.stroke_weight = base_stroke_weight / 10.f;
-    ctx.circle(p6::Center{_data->_center}, Config::get().VISUAL_RANGE);
+    Graphics::draw(
+        ctx,
+        [&]() {
+          ctx.circle(p6::Center{_data->_center}, Config::get().VISUAL_RANGE);
+        },
+        Config::get().VISUAL_RANGE_COLOR,
+        Config::get().VISUAL_RANGE_FILL_COLOR);
   }
 
   // Draw vision vector
   if (Config::get().SHOW_MOVEMENT_VECTOR) {
-    color = Config::get().MOVEMENT_RANGE_COLOR;
-    ctx.stroke = {color[0], color[1], color[2], color[3]};
-    ctx.use_stroke = true;
-    ctx.stroke_weight = base_stroke_weight / 10.f;
-    glm::vec3 p2 = _data->_movement * 10.f;
-    ctx.line(_data->_center, _data->_center + p2);
+    Graphics::draw(
+        ctx,
+        [&]() {
+          glm::vec3 p2 = _data->_movement * 10.f;
+          ctx.line(_data->_center, _data->_center + p2);
+        },
+        Config::get().MOVEMENT_RANGE_COLOR);
   }
-
-  ctx.stroke_weight = base_stroke_weight;
 }
 
 void Fish::update() {

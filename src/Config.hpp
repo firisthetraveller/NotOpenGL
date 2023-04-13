@@ -2,7 +2,7 @@
 #define __FISH_CONFIG__
 
 #include "imgui.h"
-#include <array>
+#include "internal/graphics.hpp"
 
 struct Config {
 private:
@@ -13,10 +13,10 @@ public:
   Config(Config &&move) = delete;
 
   // Simulation parameters
-  int FISH_COUNT = 200;
+  int FISH_COUNT = 100;
   int OBSTACLE_COUNT = 5;
 
-  float MIN_DISTANCE = 0.05f;
+  float MIN_DISTANCE = 0.02f;
   float VISUAL_RANGE = 0.2f;
   float ASPECT_RATIO = 1.0f;
 
@@ -44,19 +44,18 @@ public:
   bool SHOW_MOVEMENT_VECTOR = false;
 
   // Style
-  std::array<float, 4> FISH_COLOR_1 = {0.f, 0.f, 0.f, 200.0f / 255.0f};
+  Graphics::Color FISH_COLOR_1 = {0.f, 0.f, 0.f, 200.0f / 255.0f};
 
-  std::array<float, 4> FOOD_COLOR = {1.f, 0.f, 0.f, 200.0f / 255.0f};
-  std::array<float, 4> FOOD_FILL_COLOR = {1.f, 0.f, 0.f, 255.0f / 255.0f};
+  Graphics::Color FOOD_COLOR = {1.f, 0.f, 0.f, 200.0f / 255.0f};
+  Graphics::Color FOOD_FILL_COLOR = {1.f, 0.f, 0.f, 255.0f / 255.0f};
 
-  std::array<float, 4> OBSTACLE_STROKE_COLOR = {0.f, 0.f, 0.f, 200.0f / 255.0f};
-  std::array<float, 4> OBSTACLE_FILL_COLOR = {0.5f, 0.5f, 0.5f,
-                                              255.0f / 255.0f};
+  Graphics::Color OBSTACLE_STROKE_COLOR = {0.f, 0.f, 0.f, 200.0f / 255.0f};
+  Graphics::Color OBSTACLE_FILL_COLOR = {0.5f, 0.5f, 0.5f, 255.0f / 255.0f};
 
-  std::array<float, 4> VISUAL_RANGE_COLOR = {0.f, 0.f, 0.f, 50.0f / 255.0f};
-  std::array<float, 4> VISUAL_RANGE_FILL_COLOR = {
-      114.0f / 255.0f, 144.0f / 255.0f, 154.0f / 255.0f, 20.0f / 255.0f};
-  std::array<float, 4> MOVEMENT_RANGE_COLOR = {0.f, 0.f, 0.f, 200.0f / 255.0f};
+  Graphics::Color VISUAL_RANGE_COLOR = {0.f, 0.f, 0.f, 50.0f / 255.0f};
+  Graphics::Color VISUAL_RANGE_FILL_COLOR = {114.0f / 255.0f, 144.0f / 255.0f,
+                                             154.0f / 255.0f, 20.0f / 255.0f};
+  Graphics::Color MOVEMENT_RANGE_COLOR = {0.f, 0.f, 0.f, 200.0f / 255.0f};
 
   static Config &get() {
     static Config INSTANCE;
