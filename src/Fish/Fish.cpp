@@ -138,7 +138,7 @@ bool Fish::isNear(std::shared_ptr<Fish> &other) const {
 
 void Fish::addHistory(glm::vec3 &position) {
   _history.push_front(position);
-  int excess = _history.size() - Config::get().HISTORY_SIZE;
+  int excess = static_cast<int>(_history.size()) - Config::get().HISTORY_SIZE;
 
   for (int i = 0; i < excess; i++) {
     _history.pop_back();
