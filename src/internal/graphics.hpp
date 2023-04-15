@@ -7,6 +7,15 @@ namespace Graphics {
 using Color = std::array<float, 4>;
 using DrawFunction = std::function<void()>;
 
+namespace NamedColor {
+static const Color BLACK = {0, 0, 0, 1};
+static const Color RED = {1, 0, 0, 1};
+static const Color GREEN = {0, 1, 0, 1};
+static const Color BLUE = {0, 0, 1, 1};
+static const Color WHITE = {1, 1, 1, 1};
+static const Color NONE = {0, 0, 0, 0};
+}; // namespace NamedColor
+
 inline static p6::Color top6(const Color &color) {
   return {color[0], color[1], color[2], color[3]};
 }

@@ -9,11 +9,12 @@ inline void imguiInit() {
 
   if (ImGui::CollapsingHeader("Boid parameters")) {
     ImGui::SliderFloat("Visual range", &Config::get().VISUAL_RANGE, 0.f, 0.4f);
-    ImGui::SliderFloat("Vital space", &Config::get().MIN_DISTANCE, 0.f, 0.1f);
     ImGui::SliderFloat("Speed limit", &Config::get().SPEED_LIMIT, 0.f, 0.01f);
   }
 
   if (ImGui::CollapsingHeader("Behavior parameters")) {
+    ImGui::SliderFloat("Vital space", &Config::get().SEPARATION_MIN_DISTANCE,
+                       0.f, 0.1f);
     ImGui::SliderFloat("Separation", &Config::get().SEPARATION_FACTOR, 0.f,
                        0.05f);
     ImGui::SliderFloat("Alignment", &Config::get().ALIGNMENT_FACTOR, 0.f, 0.1f);
@@ -34,6 +35,8 @@ inline void imguiInit() {
     ImGui::Checkbox("Show visual ranges", &Config::get().SHOW_VISUAL_RANGES);
     ImGui::Checkbox("Show movement vector",
                     &Config::get().SHOW_MOVEMENT_VECTOR);
+    ImGui::Checkbox("Show position history",
+                    &Config::get().SHOW_POSITION_HISTORY);
   }
 
   if (ImGui::CollapsingHeader("Colors")) {
@@ -50,8 +53,10 @@ inline void imguiInit() {
              : (alpha_preview ? ImGuiColorEditFlags_AlphaPreview : 0)) |
         (options_menu ? 0 : ImGuiColorEditFlags_NoOptions);
 
-    ImGui::ColorEdit4("Fish type #1", Config::get().FISH_COLOR_1.data(),
+    ImGui::ColorEdit4("Fish type #1", Config::get().FISH_1_COLOR.data(),
                       misc_flags);
+    ImGui::ColorEdit4("Fish type #1 - Fill",
+                      Config::get().FISH_1_FILL_COLOR.data(), misc_flags);
 
     ImGui::ColorEdit4("Food", Config::get().FOOD_COLOR.data(), misc_flags);
     ImGui::ColorEdit4("Food - Fill", Config::get().FOOD_FILL_COLOR.data(),
@@ -66,6 +71,8 @@ inline void imguiInit() {
                       Config::get().VISUAL_RANGE_FILL_COLOR.data(), misc_flags);
     ImGui::ColorEdit4("Movement range",
                       Config::get().MOVEMENT_RANGE_COLOR.data(), misc_flags);
+    ImGui::ColorEdit4("Movement history",
+                      Config::get().MOVEMENT_HISTORY_COLOR.data(), misc_flags);
   }
   ImGui::End();
 
