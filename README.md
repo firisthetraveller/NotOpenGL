@@ -1,24 +1,24 @@
-# Simple-p6-Setup
+# NotOpenGL
 
-This template contains all the things you need to get started with a clean and modern C++ project (formatter, linter, tests, continuous integration, etc.).
+This project is a simulation of boids behavior, made in modern (C++20).
+
 **It works on all platforms (Windows, Linux, MacOS).**
 
-> **Please read the first three chapters very carefully as this project requires some specific setup, in particular when downloading (cloning) the repository.**
-
-- [Setting up](#setting-up)
-  - [Installing](#installing)
-  - [Compiling](#compiling)
-  - [Clangd](#clangd)
-  - [Formatter](#formatter)
-  - [Linter](#linter)
-- [Coding](#coding)
-  - [Renaming the project](#renaming-the-project)
-  - [Folder structure](#folder-structure)
-  - [p6](#p6)
-- [Going further](#going-further)
-  - [Writing tests](#writing-tests)
-  - [Continuous Integration (CI)](#continuous-integration-ci)
-  - [Warnings as errors](#warnings-as-errors)
+- [NotOpenGL](#notopengl)
+  - [Setting up](#setting-up)
+    - [Installing](#installing)
+    - [Compiling](#compiling)
+    - [Clangd](#clangd)
+    - [Formatter](#formatter)
+    - [Linter](#linter)
+  - [Coding](#coding)
+    - [Renaming the project](#renaming-the-project)
+    - [Folder structure](#folder-structure)
+    - [p6](#p6)
+  - [Going further](#going-further)
+    - [Writing tests](#writing-tests)
+    - [Continuous Integration (CI)](#continuous-integration-ci)
+    - [Warnings as errors](#warnings-as-errors)
 
 ## Setting up
 
