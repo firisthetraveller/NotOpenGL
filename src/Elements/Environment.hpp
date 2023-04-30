@@ -1,9 +1,9 @@
 #ifndef __ENVIRONMENT_FISH__
 #define __ENVIRONMENT_FISH__
 
-#include "Fish/FishData.hpp"
-#include "Food/Food.hpp"
-#include "Obstacle/Obstacle.hpp"
+#include "Elements/Fish/FishData.hpp"
+#include "Elements/Food/Food.hpp"
+#include "Elements/Obstacle/Obstacle.hpp"
 
 #include <memory>
 #include <vector>

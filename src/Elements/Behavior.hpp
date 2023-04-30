@@ -2,7 +2,7 @@
 #define __BEHAVIOR__
 
 #include "Config.hpp"
-#include "Environment.hpp"
+#include "Elements/Environment.hpp"
 #include "Fish/FishData.hpp"
 #include "Food/Food.hpp"
 #include "glm/fwd.hpp"

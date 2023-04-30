@@ -1,5 +1,5 @@
 #include "Config.hpp"
-#include "Fish/Fish.hpp"
+#include "Elements/Fish/Fish.hpp"
 #include "doctest/doctest.h"
 #include "glm/fwd.hpp"
 #include "internal/generate_range.hpp"

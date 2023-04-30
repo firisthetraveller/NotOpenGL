@@ -1,9 +1,9 @@
 #ifndef __FISH__
 #define __FISH__
-#include "Behavior.hpp"
-#include "Environment.hpp"
+#include "Elements/Behavior.hpp"
+#include "Elements/Environment.hpp"
+#include "Elements/Food/Food.hpp"
 #include "FishData.hpp"
-#include "Food/Food.hpp"
 #include "glm/fwd.hpp"
 #include "internal/generate_range.hpp"
 #include <deque>

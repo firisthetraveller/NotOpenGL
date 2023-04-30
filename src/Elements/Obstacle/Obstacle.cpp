@@ -1,5 +1,5 @@
 #include "Obstacle.hpp"
-#include "../Config.hpp"
+#include "Config.hpp"
 #include "internal/graphics.hpp"
 
 Obstacle::Obstacle(glm::vec2 center, float radius)
