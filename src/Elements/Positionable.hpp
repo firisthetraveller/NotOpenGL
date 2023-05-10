@@ -2,6 +2,7 @@
 #define __DRAWABLE__
 
 #include "Config.hpp"
+#include "Elements/Food/Food.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
 #include "glm/ext/vector_float3.hpp"
 #include "glm/gtx/transform.hpp"
@@ -16,7 +17,7 @@ concept is_positionable = requires(T element) {
   { element.getRadius() } -> std::convertible_to<float>;
 };
 
-template <is_positionable P> glm::mat4 getModelMatrix(P element) {
+template <is_positionable P> glm::mat4 getModelMatrix(P &element) {
   return glm::translate(element.getPosition()) *
          glm::rotate(element.getRotationX(), {1, 0, 0}) *
          glm::rotate(element.getRotationY(), {0, 1, 0});
