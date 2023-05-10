@@ -20,20 +20,17 @@ private:
 
   void addDefaultBehaviors();
   void applyBehaviors();
-  void addHistory(glm::vec3 &position);
+  void addHistory(const glm::vec3 &position);
 
 public:
   Fish(const glm::vec2 &center = p6::random::point(),
-       const p6::Radius &radius = p6::Radius{generate_range(0.01f, 0.02f)},
-       const p6::Rotation &rotation = p6::Rotation{},
+       const float &radius = generate_range(0.01f, 0.02f),
+       const float &rotationX = 0.f, const float &rotationY = 0.f,
        const glm::vec2 &movement = {});
   Fish(const Fish &) = delete;
   explicit Fish(std::shared_ptr<FishData> data);
 
   bool operator==(const Fish &other) const;
-
-  bool isOutOfBounds() const;
-  bool isNear(std::shared_ptr<Fish> &other) const;
 
   const std::shared_ptr<FishData> &getData() const { return _data; }
   void showId();
@@ -42,12 +39,17 @@ public:
   bool canEat() const;
 
   void draw(p6::Context &ctx) const;
-  void addBehavior(Behavior behavior);
+  void addBehavior(const Behavior &behavior);
 
   /**
    * Updates the fish after one tick.
    */
   void update();
+
+  glm::vec3 getPosition() const { return _data->getPosition(); }
+  float getRotationX() const { return _data->getRotationX(); }
+  float getRotationY() const { return _data->getRotationY(); }
+  float getRadius() const { return _data->getRadius(); }
 };
 
 #endif

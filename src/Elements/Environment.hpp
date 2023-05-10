@@ -1,6 +1,7 @@
 #ifndef __ENVIRONMENT_FISH__
 #define __ENVIRONMENT_FISH__
 
+#include "Elements/ElementManager.hpp"
 #include "Elements/Fish/FishData.hpp"
 #include "Elements/Food/Food.hpp"
 #include "Elements/Obstacle/Obstacle.hpp"
@@ -15,9 +16,9 @@ private:
 public:
   Environment(Environment &other) = delete;
   Environment(Environment &&move) = delete;
-  std::vector<std::shared_ptr<FishData>> fishData;
-  std::vector<std::shared_ptr<Food>> foods;
-  std::vector<std::shared_ptr<Obstacle>> obstacles;
+  ElementManager<FishData> fishData;
+  ElementManager<Food> foods;
+  ElementManager<Obstacle> obstacles;
 
   static Environment &getInstance() {
     static Environment INSTANCE;

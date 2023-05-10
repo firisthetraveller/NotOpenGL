@@ -2,10 +2,10 @@
 #include "Config.hpp"
 #include "glm/fwd.hpp"
 
-FishData::FishData(unsigned int id, glm::vec3 center, p6::Radius radius,
-                   p6::Rotation rotation, glm::vec3 movement)
-    : _id(id), _center(center), _radius(radius), _rotation(rotation),
-      _movement(movement) {}
+FishData::FishData(unsigned int id, glm::vec3 center, float radius,
+                   float rotationX, float rotationY, glm::vec3 movement)
+    : _id(id), _center(center), _radius(radius), _rotationX(rotationX),
+      _rotationY(rotationY), _movement(movement) {}
 
 static bool isOutOfBoundCoord(float coordinate, float limit = 1.0) {
   return (coordinate <= -limit || coordinate >= limit);
@@ -23,12 +23,6 @@ static float otherSide(float origin, float limit) {
 
 static float teleportIfOutOfBounds(float origin, float limit = 1.0f) {
   return (isOutOfBoundCoord(origin, limit)) ? otherSide(origin, limit) : origin;
-}
-
-bool FishData::isNear(const glm::vec3 &otherPosition, float otherSize,
-                      float distance) const {
-  return glm::distance(glm::vec2(this->_center), glm::vec2(otherPosition)) <
-         (distance - otherSize);
 }
 
 void FishData::teleport() {

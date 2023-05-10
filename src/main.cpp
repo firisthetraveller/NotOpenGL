@@ -5,6 +5,7 @@
 #include "Elements/Fish/FishData.hpp"
 #include "Elements/Food/Food.hpp"
 #include "Elements/Obstacle/Obstacle.hpp"
+#include "Elements/Positionable.hpp"
 #include "glm/fwd.hpp"
 #include "imgui.h"
 #include "p6/p6.h"
@@ -39,10 +40,7 @@ static void eatingTime(std::vector<std::shared_ptr<Fish>> &fishs,
     }
 
     for (auto &food : foods) {
-      if (food->exists() &&
-          Geometry::distance2D(food->getPosition(), fish->getData()->_center) <
-              food->getHitbox()) {
-        // std::cout << "nom nom nom\n";
+      if (food->exists() && isNear(*food, *fish, food->getRadius())) {
         fish->eats(food);
         if (!fish->canEat()) {
           break;
@@ -84,15 +82,16 @@ int main(int argc, char *argv[]) {
   Config::get().ASPECT_RATIO = ctx.aspect_ratio();
 
   auto fishs = generate<Fish>(Config::get().FISH_COUNT);
-  Environment::getInstance().obstacles =
+  Environment::getInstance().obstacles.elements =
       generate<Obstacle>(Config::get().OBSTACLE_COUNT);
 
   ctx.imgui = [&]() { imguiInit(); };
 
   ctx.mouse_pressed = [&](p6::MouseButton button) {
     if (button.button == p6::Button::Right) {
-      Environment::getInstance().foods.emplace_back(std::make_shared<Food>(
-          glm::vec3{button.position.x, button.position.y, 0}));
+      Environment::getInstance().foods.elements.emplace_back(
+          std::make_shared<Food>(
+              glm::vec3{button.position.x, button.position.y, 0}));
     }
   };
 
@@ -100,7 +99,7 @@ int main(int argc, char *argv[]) {
   ctx.update = [&]() {
     ctx.background(p6::NamedColor::Blue);
 
-    Environment::getInstance().fishData = getDataFromFish(fishs);
+    Environment::getInstance().fishData.elements = getDataFromFish(fishs);
 
     // -- Debug -- Border rectangle
     // ctx.rectangle(p6::TopLeftCorner{-Config::get().ASPECT_RATIO, 1},
@@ -111,11 +110,12 @@ int main(int argc, char *argv[]) {
       fish->draw(ctx);
     }
 
-    for (const auto &obstacle : Environment::getInstance().obstacles) {
+    for (const auto &obstacle :
+         Environment::getInstance().obstacles.getElements()) {
       obstacle->draw(ctx);
     }
 
-    eatingTime(fishs, Environment::getInstance().foods);
+    eatingTime(fishs, Environment::getInstance().foods.elements);
 
     // -- Debug -- Check food HP
     // for (auto food : Environment::getInstance().foods) {
@@ -123,8 +123,9 @@ int main(int argc, char *argv[]) {
     // }
 
     // Food
-    Environment::getInstance().foods =
-        filter(Environment::getInstance().foods,
+
+    Environment::getInstance().foods.elements =
+        filter(Environment::getInstance().foods.elements,
                Predicate<std::shared_ptr<Food>>(
                    [](std::shared_ptr<Food> &f) { return f->exists(); }));
 

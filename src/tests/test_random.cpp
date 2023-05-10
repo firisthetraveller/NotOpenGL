@@ -1,5 +1,6 @@
 #include "Config.hpp"
 #include "Elements/Fish/Fish.hpp"
+#include "Elements/Positionable.hpp"
 #include "doctest/doctest.h"
 #include "glm/fwd.hpp"
 #include "internal/generate_range.hpp"
@@ -18,23 +19,23 @@ TEST_CASE("Random range is good") {
 TEST_CASE("Boids are generated in the pond") {
   for (unsigned int i = 0; i < 100; i++) {
     Fish fish = Fish();
-    CHECK((fish.getData()->_center.x > -1 && fish.getData()->_center.x < 1.0 &&
-           fish.getData()->_center.y > -1 && fish.getData()->_center.y < 1.0));
+    CHECK((fish.getPosition().x > -1 && fish.getPosition().x < 1.0 &&
+           fish.getPosition().y > -1 && fish.getPosition().y < 1.0));
   }
 }
 
 TEST_CASE("Boids can detect each other") {
   std::shared_ptr<Fish> fish = std::make_shared<Fish>();
   std::shared_ptr<Fish> fish2 = std::make_shared<Fish>(
-      glm::vec2{fish->getData()->_center.x + Config::get().VISUAL_RANGE / 2,
-                fish->getData()->_center.y},
-      fish->getData()->_radius, fish->getData()->_rotation);
+      glm::vec2{fish->getPosition().x + Config::get().VISUAL_RANGE / 2,
+                fish->getPosition().y},
+      fish->getRadius(), fish->getRotationX());
 
-  CHECK((fish->isNear(fish2)));
+  CHECK((isNear(*fish, *fish2, Config::get().VISUAL_RANGE)));
 
   std::shared_ptr<Fish> fish3 = std::make_shared<Fish>(
-      glm::vec2{fish->getData()->_center.x + 2 * Config::get().VISUAL_RANGE,
-                fish->getData()->_center.y},
-      fish->getData()->_radius, fish->getData()->_rotation);
-  CHECK((!fish->isNear(fish3)));
+      glm::vec2{fish->getPosition().x + 2 * Config::get().VISUAL_RANGE,
+                fish->getPosition().y},
+      fish->getRadius(), fish->getRotationX());
+  CHECK((!isNear(*fish, *fish3, Config::get().VISUAL_RANGE)));
 }

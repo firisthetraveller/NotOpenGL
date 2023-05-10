@@ -3,6 +3,7 @@
 
 #include "Config.hpp"
 #include "Elements/Environment.hpp"
+#include "Elements/Positionable.hpp"
 #include "Fish/FishData.hpp"
 #include "Food/Food.hpp"
 #include "glm/fwd.hpp"
@@ -37,18 +38,18 @@ public:
 
   static Behavior wallAvoidance() {
     return [&](std::shared_ptr<FishData> &fish) {
-      if (fish->_center.x <
+      if (fish->getPosition().x <
           -Config::get().ASPECT_RATIO + Config::get().WALL_MARGIN) {
         fish->_movement.x += Config::get().WALL_TURN_FACTOR;
       }
-      if (fish->_center.x >
+      if (fish->getPosition().x >
           Config::get().ASPECT_RATIO - Config::get().WALL_MARGIN) {
         fish->_movement.x -= Config::get().WALL_TURN_FACTOR;
       }
-      if (fish->_center.y < -1 + Config::get().WALL_MARGIN) {
+      if (fish->getPosition().y < -1 + Config::get().WALL_MARGIN) {
         fish->_movement.y += Config::get().WALL_TURN_FACTOR;
       }
-      if (fish->_center.y > 1 - Config::get().WALL_MARGIN) {
+      if (fish->getPosition().y > 1 - Config::get().WALL_MARGIN) {
         fish->_movement.y -= Config::get().WALL_TURN_FACTOR;
       }
       // std::cout << "Wall avoidance" << '\n';
@@ -76,8 +77,8 @@ public:
         }
 
         float distance =
-            Geometry::distance2D(food->getPosition(), fish->_center) -
-            food->getHitbox();
+            Geometry::distance2D(food->getPosition(), fish->getPosition()) -
+            food->getRadius();
         if (distance < Config::get().VISUAL_RANGE) {
           map.emplace_back(food, distance);
         }
@@ -100,9 +101,9 @@ public:
       // std::cout << "Fish is near? : " << fish.isNear(min.first) << '\n';
 
       // Overload movement
-      if (fish->isNear(min.first->getPosition(), min.first->getHitbox())) {
+      if (isNear(*fish, *(min.first), Config::get().VISUAL_RANGE)) {
         float speed = glm::length(fish->_movement);
-        auto movement = (min.first->getPosition() - fish->_center);
+        auto movement = (min.first->getPosition() - fish->getPosition());
         movement *= (32.0f / glm::length(movement)) * speed;
         // std::cout << glm::length(movement) << " - "
         //           << notXSq(glm::length(movement)) / glm::length(movement)
@@ -122,9 +123,9 @@ public:
 
       for (auto &other : Environment::getInstance().fishData) {
         if (!(other.get() == fish.get())) {
-          if (fish->isNear(other->_center)) {
+          if (isNear(*fish, *other, Config::get().VISUAL_RANGE)) {
             neighbors += 1;
-            center += other->_center;
+            center += other->getPosition();
           }
         }
       }
@@ -132,7 +133,7 @@ public:
       if (neighbors != 0) {
         center /= neighbors;
         fish->_movement +=
-            (center - fish->_center) * Config::get().COHESION_FACTOR;
+            (center - fish->getPosition()) * Config::get().COHESION_FACTOR;
       }
 
       // std::cout << "Cohesion" << '\n';
@@ -144,9 +145,8 @@ public:
       glm::vec3 movement(0);
       for (auto &other : Environment::getInstance().fishData) {
         if (!(other.get() == fish.get())) {
-          if (fish->isNear(other->_center, 0.0f,
-                           Config::get().SEPARATION_MIN_DISTANCE)) {
-            movement += fish->_center - other->_center;
+          if (isNear(*fish, *other, Config::get().SEPARATION_MIN_DISTANCE)) {
+            movement += fish->getPosition() - other->getPosition();
           }
         }
       }
@@ -164,7 +164,7 @@ public:
 
       for (auto &other : Environment::getInstance().fishData) {
         if (!(other.get() == fish.get())) {
-          if (fish->isNear(other->_center)) {
+          if (isNear(*fish, *other, Config::get().VISUAL_RANGE)) {
             neighbors += 1;
             alignmentVector += other->_movement;
           }
@@ -184,11 +184,11 @@ public:
     return [&](std::shared_ptr<FishData> &fish) {
       glm::vec3 movement(0);
       for (auto &other : Environment::getInstance().obstacles) {
-        if (fish->isNear(other->_center, 0.0f,
-                         Config::get().OBSTACLE_DETECTION_RADIUS)) {
-          movement += (fish->_center - other->_center) *
-                      (other->_radius /
-                       Geometry::distance2D(fish->_center, other->_center));
+        if (isNear(*fish, *other, Config::get().OBSTACLE_DETECTION_RADIUS)) {
+          movement +=
+              (fish->getPosition() - other->getPosition()) *
+              (other->getRadius() /
+               Geometry::distance2D(fish->getPosition(), other->getPosition()));
         }
       }
 

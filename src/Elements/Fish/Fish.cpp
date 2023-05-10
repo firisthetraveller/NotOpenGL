@@ -16,10 +16,11 @@ static unsigned int nextId() {
   return currentId++;
 }
 
-Fish::Fish(const glm::vec2 &center, const p6::Radius &radius,
-           const p6::Rotation &rotation, const glm::vec2 &movement)
+Fish::Fish(const glm::vec2 &center, const float &radius, const float &rotationX,
+           const float &rotationY, const glm::vec2 &movement)
     : _data(std::make_shared<FishData>(nextId(), glm::vec3(center, 1), radius,
-                                       rotation, glm::vec3(movement, 0))),
+                                       rotationX, rotationY,
+                                       glm::vec3(movement, 0))),
       _eatingCooldown(0) {
   addDefaultBehaviors();
 }
@@ -46,7 +47,7 @@ void Fish::addDefaultBehaviors() {
   _behaviors.emplace_back(BehaviorFactory::speedLimiter());
 }
 
-void Fish::addBehavior(Behavior behavior) {
+void Fish::addBehavior(const Behavior &behavior) {
   _behaviors.emplace(_behaviors.end() - 1, behavior);
 }
 
@@ -75,7 +76,7 @@ void Fish::draw(p6::Context &ctx) const {
       ctx,
       [&]() {
         ctx.equilateral_triangle(
-            p6::Center{_data->_center}, _data->_radius,
+            p6::Center{_data->getPosition()}, _data->getRadius(),
             p6::Rotation(p6::Angle{glm::vec2(_data->_movement)}));
       },
       Config::get().FISH_1_COLOR, Config::get().FISH_1_FILL_COLOR);
@@ -84,7 +85,8 @@ void Fish::draw(p6::Context &ctx) const {
     Graphics::draw(
         ctx,
         [&]() {
-          ctx.circle(p6::Center{_data->_center}, Config::get().VISUAL_RANGE);
+          ctx.circle(p6::Center{_data->getPosition()},
+                     Config::get().VISUAL_RANGE);
         },
         Config::get().VISUAL_RANGE_COLOR,
         Config::get().VISUAL_RANGE_FILL_COLOR);
@@ -96,7 +98,7 @@ void Fish::draw(p6::Context &ctx) const {
         ctx,
         [&]() {
           glm::vec3 p2 = _data->_movement * 10.f;
-          ctx.line(_data->_center, _data->_center + p2);
+          ctx.line(_data->getPosition(), _data->getPosition() + p2);
         },
         Config::get().MOVEMENT_RANGE_COLOR);
   }
@@ -106,7 +108,7 @@ void Fish::draw(p6::Context &ctx) const {
         ctx,
         [&]() {
           glm::vec3 p2 = _data->_movement * 10.f;
-          ctx.line(_data->_center, _data->_center + p2);
+          ctx.line(_data->getPosition(), _data->getPosition() + p2);
         },
         Config::get().MOVEMENT_RANGE_COLOR);
   }
@@ -123,20 +125,16 @@ void Fish::draw(p6::Context &ctx) const {
 
 void Fish::update() {
   applyBehaviors();
-  addHistory(_data->_center);
+  addHistory(_data->getPosition());
 
   // Fullness
   _eatingCooldown--;
 
   // Movement
-  _data->_center += _data->_movement;
+  _data->updatePosition(_data->_movement);
 }
 
-bool Fish::isNear(std::shared_ptr<Fish> &other) const {
-  return _data->isNear(other->getData()->_center);
-}
-
-void Fish::addHistory(glm::vec3 &position) {
+void Fish::addHistory(const glm::vec3 &position) {
   _history.push_front(position);
   int excess = static_cast<int>(_history.size()) - Config::get().HISTORY_SIZE;
 

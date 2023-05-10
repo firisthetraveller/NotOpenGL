@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __GRAPHICS_FOR_FISH__
+#define __GRAPHICS_FOR_FISH__
 
 #include <array>
 #include <p6/p6.h>
@@ -16,6 +17,9 @@ static const Color WHITE = {1, 1, 1, 1};
 static const Color NONE = {0, 0, 0, 0};
 }; // namespace NamedColor
 
+/**
+ * Translates a `Color` (`std::array<float, 4>`) to a `p6::Color`.
+ */
 inline static p6::Color top6(const Color &color) {
   return {color[0], color[1], color[2], color[3]};
 }
@@ -34,3 +38,5 @@ inline void draw(p6::Context &ctx, const DrawFunction &drawFunction,
 }
 
 }; // namespace Graphics
+
+#endif
