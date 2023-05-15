@@ -1,3 +1,4 @@
+#include "Camera/FreeflyCamera.hpp"
 #include "Config.hpp"
 #include "Elements/Behavior.hpp"
 #include "Elements/Environment.hpp"
@@ -93,6 +94,13 @@ int main(int argc, char *argv[]) {
           std::make_shared<Food>(
               glm::vec3{button.position.x, button.position.y, 0}));
     }
+  };
+
+  FreeflyCamera camera;
+
+  ctx.mouse_scrolled = [&](p6::MouseScroll scroll) {
+    camera.rotateLeft(scroll.dy);
+    camera.rotateUp(scroll.dx);
   };
 
   // Declare your infinite update loop.

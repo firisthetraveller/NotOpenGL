@@ -20,6 +20,12 @@ public:
   ElementManager<Food> foods;
   ElementManager<Obstacle> obstacles;
 
+  void draw(glm::mat4 &viewMatrix) const {
+    fishData.draw(viewMatrix);
+    foods.draw(viewMatrix);
+    obstacles.draw(viewMatrix);
+  }
+
   static Environment &getInstance() {
     static Environment INSTANCE;
 

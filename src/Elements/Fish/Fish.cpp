@@ -114,11 +114,13 @@ void Fish::draw(p6::Context &ctx) const {
   }
 
   if (Config::get().SHOW_POSITION_HISTORY) {
-    static const int step = 10;
+    static const int step = 3;
+    auto color = Config::get().MOVEMENT_HISTORY_COLOR;
+
     for (unsigned int i = 0; i < _history.size() - step; i = i + step) {
       Graphics::draw(
-          ctx, [&]() { ctx.line(_history[i], _history[i + step]); },
-          Config::get().MOVEMENT_HISTORY_COLOR);
+          ctx, [&]() { ctx.line(_history[i], _history[i + step]); }, color);
+      color[3] -= 0.05;
     }
   }
 }
