@@ -3,6 +3,7 @@
 #include "glm/ext/quaternion_geometric.hpp"
 #include "glm/ext/vector_float3.hpp"
 #include <algorithm>
+#include <memory>
 #include <random>
 #include <stdexcept>
 
