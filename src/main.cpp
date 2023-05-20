@@ -9,6 +9,7 @@
 #include "Elements/Positionable.hpp"
 #include "glm/fwd.hpp"
 #include "imgui.h"
+#include "internal/generate.hpp"
 #include "p6/p6.h"
 #include <cstdlib>
 #include <iostream>
@@ -51,17 +52,6 @@ static void eatingTime(std::vector<std::shared_ptr<Fish>> &fishs,
   }
 }
 
-template <typename T> std::vector<std::shared_ptr<T>> generate(int count) {
-  std::vector<std::shared_ptr<T>> vec;
-  vec.reserve(count);
-
-  for (int i = 0; i < count; i++) {
-    vec.emplace_back(std::make_shared<T>());
-  }
-
-  return vec;
-}
-
 int main(int argc, char *argv[]) {
   { // Run the tests
     if (doctest::Context{}.run() != 0) {
@@ -82,9 +72,9 @@ int main(int argc, char *argv[]) {
   ctx.maximize_window();
   Config::get().ASPECT_RATIO = ctx.aspect_ratio();
 
-  auto fishs = generate<Fish>(Config::get().FISH_COUNT);
+  auto fishs = Generate::elements<Fish>(Config::get().FISH_COUNT);
   Environment::getInstance().obstacles.elements =
-      generate<Obstacle>(Config::get().OBSTACLE_COUNT);
+      Generate::elements<Obstacle>(Config::get().OBSTACLE_COUNT);
 
   ctx.imgui = [&]() { imguiInit(); };
 

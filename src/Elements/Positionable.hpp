@@ -28,8 +28,7 @@ template <is_positionable P> glm::mat4 getModelMatrix(P &element) {
 
 template <is_positionable P, is_positionable Q>
 bool isNear(P &first, Q &second, float threshold, bool debug = false) {
-  float distance = glm::distance(glm::vec2(first.getPosition()),
-                                 glm::vec2(second.getPosition()));
+  float distance = glm::distance(first.getPosition(), second.getPosition());
   float range = threshold + first.getRadius() + second.getRadius();
 
   if (debug) {

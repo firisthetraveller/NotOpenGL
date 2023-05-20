@@ -16,11 +16,10 @@ static unsigned int nextId() {
   return currentId++;
 }
 
-Fish::Fish(const glm::vec2 &center, const float &radius, const float &rotationX,
-           const float &rotationY, const glm::vec2 &movement)
-    : _data(std::make_shared<FishData>(nextId(), glm::vec3(center, 1), radius,
-                                       rotationX, rotationY,
-                                       glm::vec3(movement, 0))),
+Fish::Fish(const glm::vec3 &center, const float &radius, const float &rotationX,
+           const float &rotationY, const glm::vec3 &movement)
+    : _data(std::make_shared<FishData>(nextId(), center, radius, rotationX,
+                                       rotationY, movement)),
       _eatingCooldown(0) {
   addDefaultBehaviors();
 }

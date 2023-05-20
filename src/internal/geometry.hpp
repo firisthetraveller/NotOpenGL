@@ -14,6 +14,10 @@ namespace Geometry {
 inline float distance2D(glm::vec3 v1, glm::vec3 v2) {
   return glm::distance(glm::vec2(v1), glm::vec2(v2));
 }
+
+inline float distance3D(glm::vec3 v1, glm::vec3 v2) {
+  return glm::distance(v1, v2);
+}
 } // namespace Geometry
 
 #endif
