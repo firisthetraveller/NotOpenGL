@@ -114,7 +114,7 @@ void ElementManager<Element>::draw(const glm::mat4 &viewMatrix) const {
       _shader->setUniformMatrix(MVPMatrix, MVMatrix, NormalMatrix);
 
       // glDrawArrays
-      glDrawArrays(GL_TRIANGLES, 0, _vertices.size());
+      glDrawArrays(GL_TRIANGLES, 0, static_cast<GLsizei>(_vertices.size()));
     }
 
     _shader->disableActiveTextures();
