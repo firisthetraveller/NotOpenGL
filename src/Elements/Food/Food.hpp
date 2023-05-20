@@ -19,8 +19,6 @@ public:
   int getRemainingBites() const { return _remainingBites; }
   void getsBitten() { _remainingBites -= 1; }
 
-  void draw(p6::Context &ctx) const;
-
   glm::vec3 getPosition() const { return _position; }
   float getRadius() const { return _radius; }
   float getRotationX() const { return 0.f; }

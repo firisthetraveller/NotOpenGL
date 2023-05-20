@@ -38,7 +38,6 @@ public:
   void eats(std::shared_ptr<Food> &food);
   bool canEat() const;
 
-  void draw(p6::Context &ctx) const;
   void addBehavior(const Behavior &behavior);
 
   /**

@@ -8,7 +8,6 @@ struct Obstacle {
   float _radius;
 
   Obstacle(glm::vec2 center = p6::random::point(), float radius = 0.1f);
-  void draw(p6::Context &ctx) const;
 
   glm::vec3 getPosition() const { return _center; }
   float getRotationX() const { return 0.f; }
