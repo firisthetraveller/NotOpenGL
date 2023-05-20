@@ -5,9 +5,6 @@
 #include "Elements/Fish/FishData.hpp"
 #include "Elements/Food/Food.hpp"
 #include "Elements/Obstacle/Obstacle.hpp"
-#include "OpenGL/ShaderManager.hpp"
-#include "OpenGL/TextureManager.hpp"
-#include "glimac/sphere_vertices.hpp"
 // #include "glm/gtx/string_cast.hpp"
 
 #include <iostream>

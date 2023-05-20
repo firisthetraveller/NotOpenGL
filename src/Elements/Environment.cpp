@@ -1,7 +1,11 @@
 #include "Elements/Environment.hpp"
+#include "OpenGL/ShaderManager.hpp"
+#include "OpenGL/TextureManager.hpp"
+#include "glimac/cone_vertices.hpp"
+#include "glimac/sphere_vertices.hpp"
 
 Environment &Environment::build() {
-  fishData.setElementVertices(glimac::sphere_vertices(1.f, 32, 16));
+  fishData.setElementVertices(glimac::cone_vertices(1.f, 0.5f, 32, 16));
   std::shared_ptr<ShaderManager> fishShader = std::make_shared<ShaderManager>(
       "shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl");
   GLuint earthLocation =
