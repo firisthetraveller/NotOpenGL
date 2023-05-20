@@ -8,7 +8,7 @@
 #include "OpenGL/ShaderManager.hpp"
 #include "OpenGL/TextureManager.hpp"
 #include "glimac/sphere_vertices.hpp"
-#include "glm/gtx/string_cast.hpp"
+// #include "glm/gtx/string_cast.hpp"
 
 #include <iostream>
 #include <memory>

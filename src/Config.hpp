@@ -13,7 +13,7 @@ public:
   Config(Config &&move) = delete;
 
   // Simulation parameters
-  int FISH_COUNT = 10;
+  int FISH_COUNT = 100;
   int OBSTACLE_COUNT = 5;
   int HISTORY_SIZE = 30;
 

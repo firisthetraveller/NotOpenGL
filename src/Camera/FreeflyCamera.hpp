@@ -30,6 +30,7 @@ public:
   void moveFront(float scalar);
   void rotateLeft(float degrees);
   void rotateUp(float degrees);
+  glm::vec3 getPosition() { return _position; };
 };
 
 #endif

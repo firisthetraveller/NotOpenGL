@@ -96,7 +96,7 @@ int main(int argc, char *argv[]) {
     }
   };
 
-  FreeflyCamera camera;
+  FreeflyCamera camera({0.f, 0.f, 2.4f});
 
   ctx.mouse_scrolled = [&](p6::MouseScroll scroll) {
     camera.rotateLeft(scroll.dy);
