@@ -15,7 +15,7 @@ public:
   // Simulation parameters
   int FISH_COUNT = 100;
   int OBSTACLE_COUNT = 5;
-  int HISTORY_SIZE = 100;
+  int HISTORY_SIZE = 30;
 
   float SEPARATION_MIN_DISTANCE = 0.02f;
   float VISUAL_RANGE = 0.2f;

@@ -5,7 +5,7 @@
 #include "Elements/Food/Food.hpp"
 #include "FishData.hpp"
 #include "glm/fwd.hpp"
-#include "internal/generate_range.hpp"
+#include "internal/generate.hpp"
 #include <deque>
 #include <memory>
 #include <p6/p6.h>
@@ -23,10 +23,10 @@ private:
   void addHistory(const glm::vec3 &position);
 
 public:
-  Fish(const glm::vec2 &center = p6::random::point(),
-       const float &radius = generate_range(0.01f, 0.02f),
+  Fish(const glm::vec3 &center = Generate::point(),
+       const float &radius = Generate::range(0.01f, 0.02f),
        const float &rotationX = 0.f, const float &rotationY = 0.f,
-       const glm::vec2 &movement = {});
+       const glm::vec3 &movement = {});
   Fish(const Fish &) = delete;
   explicit Fish(std::shared_ptr<FishData> data);
 
@@ -38,7 +38,6 @@ public:
   void eats(std::shared_ptr<Food> &food);
   bool canEat() const;
 
-  void draw(p6::Context &ctx) const;
   void addBehavior(const Behavior &behavior);
 
   /**

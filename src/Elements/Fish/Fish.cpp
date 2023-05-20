@@ -16,11 +16,10 @@ static unsigned int nextId() {
   return currentId++;
 }
 
-Fish::Fish(const glm::vec2 &center, const float &radius, const float &rotationX,
-           const float &rotationY, const glm::vec2 &movement)
-    : _data(std::make_shared<FishData>(nextId(), glm::vec3(center, 1), radius,
-                                       rotationX, rotationY,
-                                       glm::vec3(movement, 0))),
+Fish::Fish(const glm::vec3 &center, const float &radius, const float &rotationX,
+           const float &rotationY, const glm::vec3 &movement)
+    : _data(std::make_shared<FishData>(nextId(), center, radius, rotationX,
+                                       rotationY, movement)),
       _eatingCooldown(0) {
   addDefaultBehaviors();
 }
@@ -70,58 +69,6 @@ void Fish::eats(std::shared_ptr<Food> &food) {
 }
 
 bool Fish::canEat() const { return _eatingCooldown < 0; }
-
-void Fish::draw(p6::Context &ctx) const {
-  Graphics::draw(
-      ctx,
-      [&]() {
-        ctx.equilateral_triangle(
-            p6::Center{_data->getPosition()}, _data->getRadius(),
-            p6::Rotation(p6::Angle{glm::vec2(_data->_movement)}));
-      },
-      Config::get().FISH_1_COLOR, Config::get().FISH_1_FILL_COLOR);
-
-  if (Config::get().SHOW_VISUAL_RANGES) {
-    Graphics::draw(
-        ctx,
-        [&]() {
-          ctx.circle(p6::Center{_data->getPosition()},
-                     Config::get().VISUAL_RANGE);
-        },
-        Config::get().VISUAL_RANGE_COLOR,
-        Config::get().VISUAL_RANGE_FILL_COLOR);
-  }
-
-  // Draw vision vector
-  if (Config::get().SHOW_MOVEMENT_VECTOR) {
-    Graphics::draw(
-        ctx,
-        [&]() {
-          glm::vec3 p2 = _data->_movement * 10.f;
-          ctx.line(_data->getPosition(), _data->getPosition() + p2);
-        },
-        Config::get().MOVEMENT_RANGE_COLOR);
-  }
-
-  if (Config::get().SHOW_MOVEMENT_VECTOR) {
-    Graphics::draw(
-        ctx,
-        [&]() {
-          glm::vec3 p2 = _data->_movement * 10.f;
-          ctx.line(_data->getPosition(), _data->getPosition() + p2);
-        },
-        Config::get().MOVEMENT_RANGE_COLOR);
-  }
-
-  if (Config::get().SHOW_POSITION_HISTORY) {
-    static const int step = 10;
-    for (unsigned int i = 0; i < _history.size() - step; i = i + step) {
-      Graphics::draw(
-          ctx, [&]() { ctx.line(_history[i], _history[i + step]); },
-          Config::get().MOVEMENT_HISTORY_COLOR);
-    }
-  }
-}
 
 void Fish::update() {
   applyBehaviors();

@@ -30,6 +30,10 @@ if(WARNINGS_AS_ERRORS)
     endif()
 endif()
 
+# ---Copy assets and shaders---
+file(COPY assets DESTINATION .)
+file(COPY shaders DESTINATION .)
+
 # ---Setup Testing---
 include(FetchContent)
 FetchContent_Declare(

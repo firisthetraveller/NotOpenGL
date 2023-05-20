@@ -27,7 +27,6 @@ static float teleportIfOutOfBounds(float origin, float limit = 1.0f) {
 
 void FishData::teleport() {
   _center = glm::vec3(
-      glm::vec2(teleportIfOutOfBounds(_center.x, Config::get().ASPECT_RATIO),
-                teleportIfOutOfBounds(_center.y)),
-      1);
+      teleportIfOutOfBounds(_center.x, Config::get().ASPECT_RATIO),
+      teleportIfOutOfBounds(_center.y), teleportIfOutOfBounds(_center.z));
 }

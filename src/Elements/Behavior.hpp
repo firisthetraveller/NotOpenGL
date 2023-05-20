@@ -31,7 +31,7 @@ public:
   static Behavior alwaysActive() {
     return [&](std::shared_ptr<FishData> &fish) {
       if (glm::length(fish->_movement) < Config::get().SPEED_LIMIT / 3) {
-        fish->_movement += glm::vec3(p6::random::direction(), 0);
+        fish->_movement += Generate::direction();
       }
     };
   }
@@ -51,6 +51,12 @@ public:
       }
       if (fish->getPosition().y > 1 - Config::get().WALL_MARGIN) {
         fish->_movement.y -= Config::get().WALL_TURN_FACTOR;
+      }
+      if (fish->getPosition().z < -1 + Config::get().WALL_MARGIN) {
+        fish->_movement.z += Config::get().WALL_TURN_FACTOR;
+      }
+      if (fish->getPosition().z > 1 - Config::get().WALL_MARGIN) {
+        fish->_movement.z -= Config::get().WALL_TURN_FACTOR;
       }
       // std::cout << "Wall avoidance" << '\n';
     };
@@ -77,7 +83,7 @@ public:
         }
 
         float distance =
-            Geometry::distance2D(food->getPosition(), fish->getPosition()) -
+            Geometry::distance3D(food->getPosition(), fish->getPosition()) -
             food->getRadius();
         if (distance < Config::get().VISUAL_RANGE) {
           map.emplace_back(food, distance);
@@ -108,9 +114,10 @@ public:
         // std::cout << glm::length(movement) << " - "
         //           << notXSq(glm::length(movement)) / glm::length(movement)
         //           << '\n';
-        fish->_movement.x += movement.x;
-        fish->_movement.y += movement.y;
-        // std::cout << "Food detected !" << '\n';
+        fish->_movement += movement;
+        // fish->_movement.y += movement.y;
+        // fish->_movement.z += movement.z;
+        //  std::cout << "Food detected !" << '\n';
       }
       // std::cout << "Food seeking" << '\n';
     };
@@ -188,7 +195,7 @@ public:
           movement +=
               (fish->getPosition() - other->getPosition()) *
               (other->getRadius() /
-               Geometry::distance2D(fish->getPosition(), other->getPosition()));
+               Geometry::distance3D(fish->getPosition(), other->getPosition()));
         }
       }
 
