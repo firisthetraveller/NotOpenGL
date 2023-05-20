@@ -10,13 +10,13 @@
 class TextureManager {
 private:
   std::map<std::string, GLuint> textureLocations;
-  TextureManager();
+  TextureManager() = default;
 
 public:
   TextureManager(TextureManager &copy) = delete;
   TextureManager(TextureManager &&move) = delete;
   ~TextureManager();
-  bool loadTexture(std::string &path);
+  GLuint loadTexture(const std::string &path);
   void unloadTexture(const std::string &path);
 
   GLuint getTextureLocation(std::string &path) const;

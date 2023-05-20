@@ -34,7 +34,8 @@ TEST_CASE("Boids can detect each other") {
   CHECK((isNear(*fish, *fish2, Config::get().VISUAL_RANGE)));
 
   std::shared_ptr<Fish> fish3 = std::make_shared<Fish>(
-      glm::vec2{fish->getPosition().x + 2 * Config::get().VISUAL_RANGE,
+      glm::vec2{fish->getPosition().x + fish->getRadius() +
+                    2 * Config::get().VISUAL_RANGE,
                 fish->getPosition().y},
       fish->getRadius(), fish->getRotationX());
   CHECK((!isNear(*fish, *fish3, Config::get().VISUAL_RANGE)));

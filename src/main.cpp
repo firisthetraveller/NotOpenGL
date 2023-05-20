@@ -105,26 +105,31 @@ int main(int argc, char *argv[]) {
 
   // Declare your infinite update loop.
   ctx.update = [&]() {
-    ctx.background(p6::NamedColor::Blue);
+    // Commands
+    if (ctx.key_is_pressed(GLFW_KEY_W)) {
+      camera.moveFront(ctx.delta_time());
+    } else if (ctx.key_is_pressed(GLFW_KEY_S)) {
+      camera.moveFront(-ctx.delta_time());
+    }
+
+    if (ctx.key_is_pressed(GLFW_KEY_A)) {
+      camera.moveLeft(ctx.delta_time());
+    } else if (ctx.key_is_pressed(GLFW_KEY_D)) {
+      camera.moveLeft(-ctx.delta_time());
+    }
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     Environment::getInstance().fishData.elements = getDataFromFish(fishs);
-
     // -- Debug -- Border rectangle
     // ctx.rectangle(p6::TopLeftCorner{-Config::get().ASPECT_RATIO, 1},
     //              p6::Radii{2 * Config::get().ASPECT_RATIO, 2});
 
     for (auto &fish : fishs) {
       fish->update();
-      fish->draw(ctx);
-    }
-
-    for (const auto &obstacle :
-         Environment::getInstance().obstacles.getElements()) {
-      obstacle->draw(ctx);
     }
 
     eatingTime(fishs, Environment::getInstance().foods.elements);
-
     // -- Debug -- Check food HP
     // for (auto food : Environment::getInstance().foods) {
     //   std::cout << "Food HP: " << food->getRemainingBites() << '\n';
@@ -137,11 +142,7 @@ int main(int argc, char *argv[]) {
                Predicate<std::shared_ptr<Food>>(
                    [](std::shared_ptr<Food> &f) { return f->exists(); }));
 
-    for (auto &food : Environment::getInstance().foods) {
-      if (food->exists()) {
-        food->draw(ctx);
-      }
-    }
+    Environment::draw(camera.getViewMatrix());
   };
 
   // Should be done last. It starts the infinite loop.

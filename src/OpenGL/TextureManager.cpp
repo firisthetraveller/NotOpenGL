@@ -1,5 +1,6 @@
 #include "TextureManager.hpp"
 #include "img/src/Image.h"
+#include <iostream>
 #include <string>
 #include <tuple>
 #include <utility>
@@ -10,7 +11,7 @@ TextureManager::~TextureManager() {
   }
 }
 
-bool TextureManager::loadTexture(std::string &path) {
+GLuint TextureManager::loadTexture(const std::string &path) {
   GLuint tmp{};
   img::Image map = p6::load_image_buffer(path);
 
@@ -25,7 +26,10 @@ bool TextureManager::loadTexture(std::string &path) {
 
   textureLocations.emplace(path, tmp);
 
-  return true;
+  if (static_cast<int>(tmp) == -1) {
+    std::cerr << "Loading texture error on:" << path << "\n";
+  }
+  return tmp;
 }
 
 void TextureManager::unloadTexture(const std::string &path) {
