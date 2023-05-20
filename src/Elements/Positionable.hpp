@@ -19,11 +19,11 @@ concept is_positionable = requires(T element) {
 };
 
 template <is_positionable P> glm::mat4 getModelMatrix(P &element) {
-  return glm::scale(glm::mat4{1.f}, {element.getRadius(), element.getRadius(),
-                                     element.getRadius()}) *
-         glm::rotate(glm::mat4{1.f}, element.getRotationX(), {1, 0, 0}) *
+  return glm::rotate(glm::mat4{1.f}, element.getRotationX(), {1, 0, 0}) *
          glm::rotate(glm::mat4{1.f}, element.getRotationY(), {0, 1, 0}) *
-         glm::translate(glm::mat4{1.f}, element.getPosition());
+         glm::translate(glm::mat4{1.f}, element.getPosition()) *
+         glm::scale(glm::mat4{1.f},
+                    glm::vec3{1.f, 1.f, 1.f} * element.getRadius());
 }
 
 template <is_positionable P, is_positionable Q>
