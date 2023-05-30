@@ -1,26 +1,24 @@
 #ifndef __SHADERMANAGER__
 #define __SHADERMANAGER__
 
-#include <map>
 #include <p6/p6.h>
+#include <map>
 #include <string>
 #include <utility>
 #include <vector>
-
 #include "TextureData.hpp"
 
 class ShaderManager {
-private:
-  p6::Shader program;
+  private:
+  p6::Shader                         program;
   std::map<std::string, TextureData> _textureUniforms;
 
   GLint uMVPMatrix;
-  GLint uModelMatrix;
+  GLint uMVMatrix;
   GLint uNormalMatrix;
 
-public:
-  ShaderManager(const std::string &vertexShaderPath,
-                const std::string &fragmentShaderPath);
+  public:
+  ShaderManager(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
 
   void use() { program.use(); }
 
@@ -30,8 +28,7 @@ public:
    * - key: path of the texture
    * - value: uniformString & textureLocation
    */
-  bool addUniformTexture(const std::string &texturePath,
-                         const std::string &uniformString, GLuint texture);
+  bool addUniformTexture(const std::string& texturePath, const std::string& uniformString, GLuint texture);
 
   /**
    * Set all the texture related uniforms.
@@ -41,8 +38,7 @@ public:
   void setUniformTexture() const;
   void enableActiveTextures() const;
   void disableActiveTextures() const;
-  void setUniformMatrix(glm::mat4 &MVPMatrix, glm::mat4 &MVMatrix,
-                        glm::mat4 &NormalMatrix) const;
+  void setUniformMatrix(glm::mat4& MVPMatrix, glm::mat4& MVMatrix, glm::mat4& NormalMatrix) const;
 };
 
 #endif

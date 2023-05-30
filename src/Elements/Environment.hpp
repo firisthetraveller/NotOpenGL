@@ -13,18 +13,18 @@
 #include <vector>
 
 struct Environment {
-private:
-  Environment() = default;
-  Environment(Environment &other) = default;
-  Environment(Environment &&move) = default;
-  Environment &build();
+  private:
+  Environment()                   = default;
+  Environment(Environment& other) = default;
+  Environment(Environment&& move) = default;
+  Environment& build();
 
-public:
+  public:
   ElementManager<FishData> fishData;
-  ElementManager<Food> foods;
+  ElementManager<Food>     foods;
   ElementManager<Obstacle> obstacles;
 
-  static void draw(const glm::mat4 &viewMatrix) {
+  static void draw(const glm::mat4& viewMatrix) {
     // std::cout << "View matrix: " << glm::to_string(viewMatrix) << std::endl;
     getInstance().fishData.draw(viewMatrix);
 
@@ -32,7 +32,7 @@ public:
     getInstance().obstacles.draw(viewMatrix);
   }
 
-  static Environment &getInstance() {
+  static Environment& getInstance() {
     static Environment INSTANCE = Environment().build();
     return INSTANCE;
   }

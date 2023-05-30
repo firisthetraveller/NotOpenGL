@@ -5,16 +5,14 @@
 #include "glm/geometric.hpp"
 
 FreeflyCamera::FreeflyCamera(glm::vec3 position, float phi, float theta)
-    : _position(position), _phi(phi), _theta(theta) {
+  : _position(position), _phi(phi), _theta(theta) {
   computeDirectionVectors();
 }
 
 void FreeflyCamera::computeDirectionVectors() {
-  _frontVector = {glm::cos(_theta) * glm::sin(_phi), glm::sin(_theta),
-                  glm::cos(_theta) * glm::cos(_phi)};
-  _leftVector = {glm::sin(_phi + glm::pi<float>() / 2.f), 0.f,
-                 glm::cos(_phi + glm::pi<float>() / 2.f)};
-  _upVector = glm::cross(_frontVector, _leftVector);
+  _frontVector = {glm::cos(_theta) * glm::sin(_phi), glm::sin(_theta), glm::cos(_theta) * glm::cos(_phi)};
+  _leftVector  = {glm::sin(_phi + glm::pi<float>() / 2.f), 0.f, glm::cos(_phi + glm::pi<float>() / 2.f)};
+  _upVector    = glm::cross(_frontVector, _leftVector);
 }
 
 glm::mat4 FreeflyCamera::getViewMatrix() const {

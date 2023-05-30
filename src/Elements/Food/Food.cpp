@@ -5,5 +5,4 @@
 #include "internal/graphics.hpp"
 
 Food::Food(glm::vec3 position, float radius)
-    : _position(position), _radius(radius),
-      _remainingBites(Config::get().DEFAULT_FOOD_BITES) {}
+  : _position(position), _radius(radius), _remainingBites(Config::get().DEFAULT_FOOD_BITES) {}

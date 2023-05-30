@@ -1,4 +1,7 @@
 #include "Fish.hpp"
+#include <iostream>
+#include <memory>
+#include <vector>
 #include "Config.hpp"
 #include "Elements/Behavior.hpp"
 #include "Elements/Environment.hpp"
@@ -7,29 +10,23 @@
 #include "glm/fwd.hpp"
 #include "glm/geometric.hpp"
 #include "internal/graphics.hpp"
-#include <iostream>
-#include <memory>
-#include <vector>
 
 static unsigned int nextId() {
   static unsigned int currentId = 0;
   return currentId++;
 }
 
-Fish::Fish(const glm::vec3 &center, const float &radius, const float &rotationX,
-           const float &rotationY, const glm::vec3 &movement)
-    : _data(std::make_shared<FishData>(nextId(), center, radius, rotationX,
-                                       rotationY, movement)),
-      _eatingCooldown(0) {
+Fish::Fish(const glm::vec3& center, const float& radius, const float& rotationX, const float& rotationY, const glm::vec3& movement)
+  : _data(std::make_shared<FishData>(nextId(), center, radius, rotationX, rotationY, movement)), _eatingCooldown(0) {
   addDefaultBehaviors();
 }
 
 Fish::Fish(std::shared_ptr<FishData> data)
-    : _data(std::move(data)), _eatingCooldown(0) {
+  : _data(std::move(data)), _eatingCooldown(0) {
   addDefaultBehaviors();
 }
 
-bool Fish::operator==(const Fish &other) const {
+bool Fish::operator==(const Fish& other) const {
   return other._data == this->_data;
 }
 
@@ -46,7 +43,7 @@ void Fish::addDefaultBehaviors() {
   _behaviors.emplace_back(BehaviorFactory::speedLimiter());
 }
 
-void Fish::addBehavior(const Behavior &behavior) {
+void Fish::addBehavior(const Behavior& behavior) {
   _behaviors.emplace(_behaviors.end() - 1, behavior);
 }
 
@@ -54,21 +51,24 @@ void Fish::addBehavior(const Behavior &behavior) {
  * Apply behaviors in the insert order.
  */
 void Fish::applyBehaviors() {
-  for (auto &behavior : _behaviors) {
+  for (auto& behavior : _behaviors) {
     behavior(this->_data);
   }
 }
 
-void Fish::showId() { std::cout << _data->getId() << '\n'; }
+void Fish::showId() {
+  std::cout << _data->getId() << '\n';
+}
 
-void Fish::eats(std::shared_ptr<Food> &food) {
+void Fish::eats(std::shared_ptr<Food>& food) {
   _eatingCooldown =
-      std::max(Config::get().FOOD_COOLDOWN_FRAMES,
-               _eatingCooldown + Config::get().FOOD_COOLDOWN_FRAMES);
+    std::max(Config::get().FOOD_COOLDOWN_FRAMES, _eatingCooldown + Config::get().FOOD_COOLDOWN_FRAMES);
   food->getsBitten();
 }
 
-bool Fish::canEat() const { return _eatingCooldown < 0; }
+bool Fish::canEat() const {
+  return _eatingCooldown < 0;
+}
 
 void Fish::update() {
   applyBehaviors();
@@ -81,7 +81,7 @@ void Fish::update() {
   _data->updatePosition(_data->_movement);
 }
 
-void Fish::addHistory(const glm::vec3 &position) {
+void Fish::addHistory(const glm::vec3& position) {
   _history.push_front(position);
   int excess = static_cast<int>(_history.size()) - Config::get().HISTORY_SIZE;
 

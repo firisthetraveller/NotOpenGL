@@ -8,7 +8,8 @@
 #include <stdexcept>
 #include <vector>
 
-template <typename T> using Predicate = std::function<bool(T &)>;
+template<typename T>
+using Predicate = std::function<bool(T&)>;
 
 /**
  * Create a vector that does not contain any element that doesn't match the
@@ -17,8 +18,8 @@ template <typename T> using Predicate = std::function<bool(T &)>;
  * @param predicate : the matching function
  * @return the filtered vector
  */
-template <typename T>
-std::vector<T> filter(std::vector<T> &vec, Predicate<T> predicate) {
+template<typename T>
+std::vector<T> filter(std::vector<T>& vec, Predicate<T> predicate) {
   //  Does not work with Clang :(
   //  return vec | std::views::filter(predicate);
   std::vector<T> tmp;

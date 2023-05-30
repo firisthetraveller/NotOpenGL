@@ -1,16 +1,16 @@
 #pragma once
 
-#include "glm/ext/quaternion_geometric.hpp"
-#include "glm/ext/vector_float3.hpp"
 #include <algorithm>
 #include <memory>
 #include <random>
 #include <stdexcept>
+#include "glm/ext/quaternion_geometric.hpp"
+#include "glm/ext/vector_float3.hpp"
 
 namespace Generate {
 inline float range(float min, float max) {
   static std::random_device rand;
-  static std::mt19937 mt32(rand());
+  static std::mt19937       mt32(rand());
   if (min > max) {
     throw std::invalid_argument("max should be bigger than min");
   }
@@ -27,7 +27,8 @@ inline glm::vec3 direction() {
   return p / glm::length(p);
 }
 
-template <typename T> std::vector<std::shared_ptr<T>> elements(int count) {
+template<typename T>
+std::vector<std::shared_ptr<T>> elements(int count) {
   std::vector<std::shared_ptr<T>> vec;
   vec.reserve(count);
 

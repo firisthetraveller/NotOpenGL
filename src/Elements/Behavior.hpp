@@ -1,6 +1,12 @@
 #ifndef __BEHAVIOR__
 #define __BEHAVIOR__
 
+#include <cmath>
+#include <functional>
+#include <iostream>
+#include <memory>
+#include <numeric>
+#include <vector>
 #include "Config.hpp"
 #include "Elements/Environment.hpp"
 #include "Elements/Positionable.hpp"
@@ -10,26 +16,20 @@
 #include "glm/geometric.hpp"
 #include "glm/gtx/quaternion.hpp"
 #include "internal/geometry.hpp"
-#include <cmath>
-#include <functional>
-#include <iostream>
-#include <memory>
-#include <numeric>
-#include <vector>
 
-using Behavior = std::function<void(std::shared_ptr<FishData> &)>;
+using Behavior = std::function<void(std::shared_ptr<FishData>&)>;
 
 class BehaviorFactory {
-public:
+  public:
   static Behavior wallTeleport() {
-    return [&](std::shared_ptr<FishData> &fish) {
+    return [&](std::shared_ptr<FishData>& fish) {
       fish->teleport();
       // std::cout << "Teleport" << '\n';
     };
   }
 
   static Behavior alwaysActive() {
-    return [&](std::shared_ptr<FishData> &fish) {
+    return [&](std::shared_ptr<FishData>& fish) {
       if (glm::length(fish->_movement) < Config::get().SPEED_LIMIT / 3) {
         fish->_movement += Generate::direction();
       }
@@ -37,13 +37,11 @@ public:
   }
 
   static Behavior wallAvoidance() {
-    return [&](std::shared_ptr<FishData> &fish) {
-      if (fish->getPosition().x <
-          -Config::get().ASPECT_RATIO + Config::get().WALL_MARGIN) {
+    return [&](std::shared_ptr<FishData>& fish) {
+      if (fish->getPosition().x < -Config::get().ASPECT_RATIO + Config::get().WALL_MARGIN) {
         fish->_movement.x += Config::get().WALL_TURN_FACTOR;
       }
-      if (fish->getPosition().x >
-          Config::get().ASPECT_RATIO - Config::get().WALL_MARGIN) {
+      if (fish->getPosition().x > Config::get().ASPECT_RATIO - Config::get().WALL_MARGIN) {
         fish->_movement.x -= Config::get().WALL_TURN_FACTOR;
       }
       if (fish->getPosition().y < -1 + Config::get().WALL_MARGIN) {
@@ -63,7 +61,7 @@ public:
   }
 
   static Behavior speedLimiter() {
-    return [&](std::shared_ptr<FishData> &fish) {
+    return [&](std::shared_ptr<FishData>& fish) {
       float speed = glm::length(fish->_movement);
 
       if (speed > Config::get().SPEED_LIMIT) {
@@ -74,17 +72,16 @@ public:
   }
 
   static Behavior foodSeeking() {
-    return [&](std::shared_ptr<FishData> &fish) {
+    return [&](std::shared_ptr<FishData>& fish) {
       std::vector<std::pair<std::shared_ptr<Food>, float>> map;
 
-      for (auto &food : Environment::getInstance().foods) {
+      for (auto& food : Environment::getInstance().foods) {
         if (!food->exists()) {
           continue;
         }
 
         float distance =
-            Geometry::distance3D(food->getPosition(), fish->getPosition()) -
-            food->getRadius();
+          Geometry::distance3D(food->getPosition(), fish->getPosition()) - food->getRadius();
         if (distance < Config::get().VISUAL_RANGE) {
           map.emplace_back(food, distance);
         }
@@ -96,11 +93,11 @@ public:
 
       // Minimum
       auto min = std::accumulate(
-          map.begin(), map.end(), map[0],
-          [](const std::pair<std::shared_ptr<Food>, float> &one,
-             const std::pair<std::shared_ptr<Food>, float> &other) {
-            return (one.second < other.second) ? one : other;
-          });
+        map.begin(), map.end(), map[0],
+        [](const std::pair<std::shared_ptr<Food>, float>& one, const std::pair<std::shared_ptr<Food>, float>& other) {
+          return (one.second < other.second) ? one : other;
+        }
+      );
 
       // std::cout << min.second << " - " << Config::get().VISUAL_RANGE
       //           << '\n';
@@ -108,8 +105,8 @@ public:
 
       // Overload movement
       if (isNear(*fish, *(min.first), Config::get().VISUAL_RANGE)) {
-        float speed = glm::length(fish->_movement);
-        auto movement = (min.first->getPosition() - fish->getPosition());
+        float speed    = glm::length(fish->_movement);
+        auto  movement = (min.first->getPosition() - fish->getPosition());
         movement *= (32.0f / glm::length(movement)) * speed;
         // std::cout << glm::length(movement) << " - "
         //           << notXSq(glm::length(movement)) / glm::length(movement)
@@ -124,11 +121,11 @@ public:
   }
 
   static Behavior cohesion() {
-    return [&](std::shared_ptr<FishData> &fish) {
+    return [&](std::shared_ptr<FishData>& fish) {
       unsigned int neighbors = 0;
-      glm::vec3 center(0);
+      glm::vec3    center(0);
 
-      for (auto &other : Environment::getInstance().fishData) {
+      for (auto& other : Environment::getInstance().fishData) {
         if (!(other.get() == fish.get())) {
           if (isNear(*fish, *other, Config::get().VISUAL_RANGE)) {
             neighbors += 1;
@@ -140,7 +137,7 @@ public:
       if (neighbors != 0) {
         center /= neighbors;
         fish->_movement +=
-            (center - fish->getPosition()) * Config::get().COHESION_FACTOR;
+          (center - fish->getPosition()) * Config::get().COHESION_FACTOR;
       }
 
       // std::cout << "Cohesion" << '\n';
@@ -148,9 +145,9 @@ public:
   }
 
   static Behavior separation() {
-    return [&](std::shared_ptr<FishData> &fish) {
+    return [&](std::shared_ptr<FishData>& fish) {
       glm::vec3 movement(0);
-      for (auto &other : Environment::getInstance().fishData) {
+      for (auto& other : Environment::getInstance().fishData) {
         if (!(other.get() == fish.get())) {
           if (isNear(*fish, *other, Config::get().SEPARATION_MIN_DISTANCE)) {
             movement += fish->getPosition() - other->getPosition();
@@ -165,11 +162,11 @@ public:
   }
 
   static Behavior alignment() {
-    return [&](std::shared_ptr<FishData> &fish) {
+    return [&](std::shared_ptr<FishData>& fish) {
       unsigned int neighbors = 0;
-      glm::vec3 alignmentVector(0);
+      glm::vec3    alignmentVector(0);
 
-      for (auto &other : Environment::getInstance().fishData) {
+      for (auto& other : Environment::getInstance().fishData) {
         if (!(other.get() == fish.get())) {
           if (isNear(*fish, *other, Config::get().VISUAL_RANGE)) {
             neighbors += 1;
@@ -188,14 +185,12 @@ public:
   }
 
   static Behavior avoidObstacles() {
-    return [&](std::shared_ptr<FishData> &fish) {
+    return [&](std::shared_ptr<FishData>& fish) {
       glm::vec3 movement(0);
-      for (auto &other : Environment::getInstance().obstacles) {
+      for (auto& other : Environment::getInstance().obstacles) {
         if (isNear(*fish, *other, Config::get().OBSTACLE_DETECTION_RADIUS)) {
           movement +=
-              (fish->getPosition() - other->getPosition()) *
-              (other->getRadius() /
-               Geometry::distance3D(fish->getPosition(), other->getPosition()));
+            (fish->getPosition() - other->getPosition()) * (other->getRadius() / Geometry::distance3D(fish->getPosition(), other->getPosition()));
         }
       }
 
@@ -204,7 +199,7 @@ public:
   }
 
   static Behavior fleePredators() {
-    return [&](std::shared_ptr<FishData> &) {
+    return [&](std::shared_ptr<FishData>&) {
       // std::cout << "Separation" << '\n';
     };
   }
