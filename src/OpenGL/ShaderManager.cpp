@@ -5,12 +5,8 @@
 #include "glm/gtc/quaternion.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
-ShaderManager::ShaderManager(const std::string &vertexShaderPath,
-                             const std::string &fragmentShaderPath)
-    : program{p6::load_shader(vertexShaderPath, fragmentShaderPath)},
-      uMVPMatrix(glGetUniformLocation(program.id(), "uMVPMatrix")),
-      uModelMatrix(glGetUniformLocation(program.id(), "uModelMatrix")),
-      uNormalMatrix(glGetUniformLocation(program.id(), "uNormalMatrix")) {}
+ShaderManager::ShaderManager(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
+  : program{p6::load_shader(vertexShaderPath, fragmentShaderPath)}, uMVPMatrix(glGetUniformLocation(program.id(), "uMVPMatrix")), uMVMatrix(glGetUniformLocation(program.id(), "uMVMatrix")), uNormalMatrix(glGetUniformLocation(program.id(), "uNormalMatrix")) {}
 
 bool ShaderManager::addUniformTexture(const std::string& texturePath, const std::string& uniformString, GLuint texture) {
   GLint uniform = glGetUniformLocation(program.id(), uniformString.data());
@@ -42,6 +38,6 @@ void ShaderManager::disableActiveTextures() const {
 
 void ShaderManager::setUniformMatrix(glm::mat4& MVPMatrix, glm::mat4& MVMatrix, glm::mat4& NormalMatrix) const {
   glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
-  glUniformMatrix4fv(uModelMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
+  glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
   glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 }
