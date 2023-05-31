@@ -87,6 +87,12 @@ int main(int argc, char* argv[]) {
     }
   };
 
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glEnable(GL_CULL_FACE);
+  //  glCullFace(GL_FRONT);
+
   FreeflyCamera camera({0.f, 0.f, 2.4f});
 
   ctx.mouse_scrolled = [&](p6::MouseScroll scroll) {
