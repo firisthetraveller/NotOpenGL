@@ -5,6 +5,7 @@
 #include "Elements/Fish/FishData.hpp"
 #include "Elements/Food/Food.hpp"
 #include "Elements/Obstacle/Obstacle.hpp"
+#include "glm/ext/vector_float3.hpp"
 // #include "glm/gtx/string_cast.hpp"
 
 #include <iostream>
@@ -24,12 +25,11 @@ struct Environment {
   ElementManager<Food>     foods;
   ElementManager<Obstacle> obstacles;
 
-  static void draw(const glm::mat4& viewMatrix) {
+  static void draw(const glm::vec3 cameraPos, const glm::mat4& viewMatrix) {
     // std::cout << "View matrix: " << glm::to_string(viewMatrix) << std::endl;
-    getInstance().fishData.draw(viewMatrix);
-
-    // getInstance().foods.draw(viewMatrix);
-    getInstance().obstacles.draw(viewMatrix);
+    getInstance().fishData.draw(cameraPos, viewMatrix);
+    getInstance().foods.draw(cameraPos, viewMatrix);
+    getInstance().obstacles.draw(cameraPos, viewMatrix);
   }
 
   static Environment& getInstance() {

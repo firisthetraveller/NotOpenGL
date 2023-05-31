@@ -45,6 +45,9 @@ struct Config {
   bool SHOW_MOVEMENT_VECTOR  = false;
   bool SHOW_POSITION_HISTORY = false;
 
+  // LOD
+  float LOD_HIGH_DISTANCE_THRESHOLD = 4.f;
+
   // Style
   Graphics::Color FISH_1_COLOR      = Graphics::NamedColor::NONE;
   Graphics::Color FISH_1_FILL_COLOR = Graphics::NamedColor::BLACK;

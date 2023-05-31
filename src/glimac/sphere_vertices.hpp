@@ -8,4 +8,7 @@ namespace glimac {
 // Son axe vertical est (0, 1, 0) et ses axes transversaux sont (1, 0, 0) et (0, 0, 1)
 std::vector<ShapeVertex> sphere_vertices(float radius, size_t discretization_latitude, size_t discretization_longitude);
 
+std::vector<ShapeVertex> sphere_lowLOD();
+std::vector<ShapeVertex> sphere_highLOD();
+
 } // namespace glimac

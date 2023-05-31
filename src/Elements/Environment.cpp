@@ -5,7 +5,7 @@
 #include "glimac/sphere_vertices.hpp"
 
 Environment& Environment::build() {
-  fishData.setElementVertices(glimac::cone_vertices(1.f, 0.5f, 32, 16));
+  fishData.setElementVertices(glimac::cone_lowLOD(), glimac::cone_highLOD());
   std::shared_ptr<ShaderManager> fishShader = std::make_shared<ShaderManager>(
     "shaders/3D.vs.glsl", "shaders/multiTex3D.fs.glsl"
   );
@@ -18,7 +18,7 @@ Environment& Environment::build() {
   fishShader->addUniformTexture("assets/textures/CloudMap.jpg", "uTexture2", cloudLocation);
   fishData.setShaderManager(fishShader);
 
-  obstacles.setElementVertices(glimac::sphere_vertices(1.f, 32, 16));
+  obstacles.setElementVertices(glimac::sphere_lowLOD(), glimac::sphere_highLOD());
   std::shared_ptr<ShaderManager> obstaclesShader =
     std::make_shared<ShaderManager>("shaders/3D.vs.glsl", "shaders/tex3D.fs.glsl");
   GLuint moonLocation =
@@ -26,7 +26,7 @@ Environment& Environment::build() {
   obstaclesShader->addUniformTexture("assets/textures/MoonMap.jpg", "uTexture1", moonLocation);
   obstacles.setShaderManager(obstaclesShader);
 
-  foods.setElementVertices(glimac::sphere_vertices(1.f, 32, 16));
+  foods.setElementVertices(glimac::sphere_lowLOD(), glimac::sphere_highLOD());
   foods.setShaderManager(obstaclesShader);
 
   return *this;
