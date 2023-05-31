@@ -6,7 +6,7 @@
 
 namespace glimac {
 
-std::vector<ShapeVertex> cone_vertices(float height, float radius, size_t discLat, size_t discHeight) // NOLINT(bugprone-easily-swappable-parameters, readability-inconsistent-declaration-parameter-name)
+std::vector<ShapeVertex> cone_vertices(float height, float radius, unsigned int discLat, unsigned int discHeight) // NOLINT(bugprone-easily-swappable-parameters, readability-inconsistent-declaration-parameter-name)
 {
   // Equation paramétrique en (r, phi, h) du cône
   // avec r >= 0, -PI / 2 <= theta <= PI / 2, 0 <= h <= height
@@ -34,8 +34,8 @@ std::vector<ShapeVertex> cone_vertices(float height, float radius, size_t discLa
   std::vector<ShapeVertex> data;
 
   // Construit l'ensemble des vertex
-  for (size_t j = 0; j <= discHeight; ++j) {
-    for (size_t i = 0; i < discLat; ++i) {
+  for (unsigned int j = 0; j <= discHeight; ++j) {
+    for (unsigned int i = 0; i < discLat; ++i) {
       const auto fj = static_cast<float>(j);
       const auto fi = static_cast<float>(i);
 
@@ -62,9 +62,9 @@ std::vector<ShapeVertex> cone_vertices(float height, float radius, size_t discLa
   // Pour une longitude donnée, les deux triangles formant une face sont de la forme :
   // (i, i + 1, i + discLat + 1), (i, i + discLat + 1, i + discLat)
   // avec i sur la bande correspondant à la longitude
-  for (size_t j = 0; j < discHeight; ++j) {
-    const size_t offset = j * discLat;
-    for (size_t i = 0; i < discLat; ++i) {
+  for (unsigned int j = 0; j < discHeight; ++j) {
+    const unsigned int offset = j * discLat;
+    for (unsigned int i = 0; i < discLat; ++i) {
       vertices.push_back(data[offset + i]);
       vertices.push_back(data[offset + (i + 1) % discLat]);
       vertices.push_back(data[offset + discLat + (i + 1) % discLat]);
@@ -78,11 +78,11 @@ std::vector<ShapeVertex> cone_vertices(float height, float radius, size_t discLa
 }
 
 std::vector<ShapeVertex> cone_lowLOD() {
-  return glimac::cone_vertices(1.f, 0.5, 8, 4);
+  return cone_vertices(1.f, 0.5, 8, 4);
 }
 
 std::vector<ShapeVertex> cone_highLOD() {
-  return glimac::cone_vertices(1.f, 0.5f, 32, 16);
+  return cone_vertices(1.f, 0.5f, 32, 16);
 }
 
 } // namespace glimac

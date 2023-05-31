@@ -7,7 +7,7 @@
 
 namespace glimac {
 
-std::vector<ShapeVertex> sphere_vertices(float radius, size_t discLat, size_t discLong) // NOLINT(bugprone-easily-swappable-parameters, readability-inconsistent-declaration-parameter-name)
+std::vector<ShapeVertex> sphere_vertices(float radius, unsigned int discLat, unsigned int discLong) // NOLINT(bugprone-easily-swappable-parameters, readability-inconsistent-declaration-parameter-name)
 {
   // Équation paramétrique en (r, phi, theta) de la sphère
   // avec r >= 0, -PI / 2 <= theta <= PI / 2, 0 <= phi <= 2PI
@@ -35,13 +35,13 @@ std::vector<ShapeVertex> sphere_vertices(float radius, size_t discLat, size_t di
   std::vector<ShapeVertex> data;
 
   // Construit l'ensemble des vertex
-  for (size_t j = 0; j <= discLong; ++j) {
+  for (unsigned int j = 0; j <= discLong; ++j) {
     const auto fj = static_cast<float>(j);
 
     const float cosTheta = std::cos(-glm::pi<float>() / 2.f + fj * theta);
     const float sinTheta = std::sin(-glm::pi<float>() / 2.f + fj * theta);
 
-    for (size_t i = 0; i <= discLat; ++i) {
+    for (unsigned int i = 0; i <= discLat; ++i) {
       const auto  fi = static_cast<float>(i);
       ShapeVertex vertex{};
 
@@ -63,9 +63,9 @@ std::vector<ShapeVertex> sphere_vertices(float radius, size_t discLat, size_t di
   // Pour une longitude donnée, les deux triangles formant une face sont de la forme :
   // (i, i + 1, i + discLat + 1), (i, i + discLat + 1, i + discLat)
   // avec i sur la bande correspondant à la longitude
-  for (size_t j = 0; j < discLong; ++j) {
-    const size_t offset = j * (discLat + 1);
-    for (size_t i = 0; i < discLat; ++i) {
+  for (unsigned int j = 0; j < discLong; ++j) {
+    const unsigned int offset = j * (discLat + 1);
+    for (unsigned int i = 0; i < discLat; ++i) {
       vertices.push_back(data[offset + i]);
       vertices.push_back(data[offset + (i + 1)]);
       vertices.push_back(data[offset + discLat + 1 + (i + 1)]);
@@ -79,11 +79,11 @@ std::vector<ShapeVertex> sphere_vertices(float radius, size_t discLat, size_t di
 }
 
 std::vector<ShapeVertex> sphere_lowLOD() {
-  return glimac::sphere_vertices(1.f, 8, 6);
+  return sphere_vertices(1.f, 8, 6);
 }
 
 std::vector<ShapeVertex> sphere_highLOD() {
-  return glimac::sphere_vertices(1.f, 32, 16);
+  return sphere_vertices(1.f, 32, 16);
 }
 
 } // namespace glimac
