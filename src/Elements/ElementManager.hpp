@@ -128,8 +128,7 @@ void ElementManager<Element>::draw(const glm::vec3& cameraPos, const glm::mat4& 
 
     // Matrix shit
     for (auto& element : elements) {
-      float d      = glm::distance(cameraPos, element->getPosition());
-      int   offset = 0;
+      float d = glm::distance(cameraPos, element->getPosition());
 
       glm::mat4 modelMatrix  = getModelMatrix(*element);
       glm::mat4 MVPMatrix    = projMatrix * viewMatrix * modelMatrix;
