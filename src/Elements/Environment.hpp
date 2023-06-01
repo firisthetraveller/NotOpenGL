@@ -27,11 +27,11 @@ struct Environment {
   ElementManager<Food>          foods;
   ElementManager<Obstacle>      obstacles;
 
-  static void draw(const glm::vec3 cameraPos, const glm::mat4& viewMatrix) {
+  void draw(const glm::vec3 cameraPos, const glm::mat4& viewMatrix, float appTime) const {
     // std::cout << "View matrix: " << glm::to_string(viewMatrix) << std::endl;
-    getInstance().fishData.draw(cameraPos, viewMatrix);
-    getInstance().foods.draw(cameraPos, viewMatrix);
-    getInstance().obstacles.draw(cameraPos, viewMatrix);
+    fishData.draw(cameraPos, viewMatrix, lights, appTime);
+    foods.draw(cameraPos, viewMatrix, lights, appTime);
+    obstacles.draw(cameraPos, viewMatrix, lights, appTime);
   }
 
   static Environment& getInstance() {

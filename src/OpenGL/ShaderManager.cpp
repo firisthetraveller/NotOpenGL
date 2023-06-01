@@ -1,7 +1,9 @@
 #include "ShaderManager.hpp"
 #include <string>
 #include <utility>
+#include <vector>
 #include "Config.hpp"
+#include "glm/fwd.hpp"
 #include "glm/gtc/quaternion.hpp"
 #include "glm/gtc/type_ptr.hpp"
 
@@ -40,4 +42,12 @@ void ShaderManager::setUniformMatrix(glm::mat4& MVPMatrix, glm::mat4& MVMatrix, 
   glUniformMatrix4fv(uMVPMatrix, 1, GL_FALSE, glm::value_ptr(MVPMatrix));
   glUniformMatrix4fv(uMVMatrix, 1, GL_FALSE, glm::value_ptr(MVMatrix));
   glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
+}
+
+void ShaderManager::setUniform3f(const std::string& name, const glm::vec3& v) const {
+  glUniform3fv(glGetUniformLocation(program.id(), name.data()), 1, glm::value_ptr(v));
+}
+
+void ShaderManager::setUniform1f(const std::string& name, float x) const {
+  glUniform1f(glGetUniformLocation(program.id(), name.data()), x);
 }

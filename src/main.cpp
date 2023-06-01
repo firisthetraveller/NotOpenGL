@@ -139,7 +139,7 @@ int main(int argc, char* argv[]) {
     Environment::getInstance().foods.elements =
       filter(Environment::getInstance().foods.elements, Predicate<std::shared_ptr<Food>>([](std::shared_ptr<Food>& f) { return f->exists(); }));
 
-    Environment::draw(camera.getPosition(), camera.getViewMatrix());
+    Environment::getInstance().draw(camera.getPosition(), camera.getViewMatrix(), ctx.time());
   };
 
   // Should be done last. It starts the infinite loop.

@@ -36,6 +36,8 @@ class ShaderManager {
    * `addUniformTexture`!
    */
   void setUniformTexture() const;
+  void setUniform1f(const std::string& name, float x) const;
+  void setUniform3f(const std::string& name, const glm::vec3& v) const;
   void enableActiveTextures() const;
   void disableActiveTextures() const;
   void setUniformMatrix(glm::mat4& MVPMatrix, glm::mat4& MVMatrix, glm::mat4& NormalMatrix) const;
