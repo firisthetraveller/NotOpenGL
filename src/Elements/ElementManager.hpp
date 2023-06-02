@@ -146,17 +146,16 @@ void ElementManager<Element>::draw(const glm::vec3& cameraPos, const glm::mat4& 
     _shader->setUniformTexture();
 
     // glUniform material
-    bool test = true;
-    test &= _shader->setUniform3f("uKd", _material._diffuse);
-    test &= _shader->setUniform3f("uKs", _material._specular);
-    test &= _shader->setUniform1f("uShininess", _material._shininess);
+    _shader->setUniform3f("uKd", _material._diffuse);
+    _shader->setUniform3f("uKs", _material._specular);
+    _shader->setUniform1f("uShininess", _material._shininess);
 
     // glUniform light
     for (unsigned int i = 0; i < lights.size(); i++) {
       glm::vec4 viewLight = viewMatrix * lights[i].rotate(appTime * (glm::pi<float>() / 180.f));
       // std::cout << "uDirectionalLights[" + std::to_string(i) + "].direction\n";
-      test &= _shader->setUniform3f("uDirectionalLights[" + std::to_string(i) + "].direction", glm::vec3(viewLight));
-      test &= _shader->setUniform3f("uDirectionalLights[" + std::to_string(i) + "].intensity", lights[i]._intensity);
+      _shader->setUniform3f("uDirectionalLights[" + std::to_string(i) + "].direction", glm::vec3(viewLight));
+      _shader->setUniform3f("uDirectionalLights[" + std::to_string(i) + "].intensity", lights[i]._intensity);
     }
 
     // glBindTexture
