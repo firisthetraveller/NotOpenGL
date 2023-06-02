@@ -72,8 +72,8 @@ void ElementManager<Element>::setElementVertices(
   for (const auto& vertex : verticesHighLOD) {
     _vertices.emplace_back(vertex);
   }
-  vertexCountLOD.emplace_back(verticesLowLOD.size());
-  vertexCountLOD.emplace_back(verticesHighLOD.size());
+  vertexCountLOD.emplace_back(static_cast<unsigned int>(verticesLowLOD.size()));
+  vertexCountLOD.emplace_back(static_cast<unsigned int>(verticesHighLOD.size()));
 
   glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   {
