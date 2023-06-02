@@ -58,4 +58,14 @@ std::vector<ShapeVertex> cube_vertices(float height) {
   return vertices;
 }
 
+std::vector<ShapeVertex> reverse_cube_vertices(float height) {
+  auto vertices = cube_vertices(height);
+
+  for (auto& vertex : vertices) {
+    vertex.normal = -vertex.normal;
+  }
+
+  return vertices;
+}
+
 }; // namespace glimac
