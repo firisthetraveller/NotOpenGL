@@ -1,14 +1,44 @@
 #include "Elements/Environment.hpp"
+#include <string>
 #include <vector>
+#include "Elements/Boundary.hpp"
 #include "Elements/ElementManager.hpp"
 #include "Elements/Fish/FishData.hpp"
 #include "Elements/Obstacle/Obstacle.hpp"
+#include "Elements/Positionable.hpp"
 #include "Lights/DirectionalLight.hpp"
 #include "Materials/Material.hpp"
 #include "OpenGL/ShaderManager.hpp"
 #include "OpenGL/TextureManager.hpp"
+#include "glimac/common.hpp"
 #include "glimac/cone_vertices.hpp"
+#include "glimac/cube_vertices.hpp"
 #include "glimac/sphere_vertices.hpp"
+
+template<is_positionable Element>
+static ElementManager<Element> buildElements(
+  const std::vector<glimac::ShapeVertex>& lowLOD,
+  const std::vector<glimac::ShapeVertex>& highLOD,
+  const Material&                         material,
+  const std::string&                      vertexShaderPath,
+  const std::string&                      fragmentShaderPath,
+  const std::string&                      texturePath
+) {
+  ElementManager<Element> elements;
+
+  elements.setElementVertices(lowLOD, highLOD);
+  elements.setMaterial(material);
+  std::shared_ptr<ShaderManager> fishShader = std::make_shared<ShaderManager>(
+    vertexShaderPath, fragmentShaderPath
+  );
+  GLuint location =
+    TextureManager::getInstance().loadTexture(texturePath);
+  fishShader->addUniformTexture(texturePath, "uTexture1", location);
+
+  elements.setShaderManager(fishShader);
+
+  return elements;
+}
 
 static std::vector<DirectionalLight> buildLights() {
   std::vector<DirectionalLight> lights;
@@ -30,54 +60,51 @@ static std::vector<DirectionalLight> buildLights() {
 }
 
 static ElementManager<FishData> buildFish() {
-  ElementManager<FishData> fishElements;
-
-  fishElements.setElementVertices(glimac::cone_lowLOD(), glimac::cone_highLOD());
-  fishElements.setMaterial(Material{glm::vec3(0.61568, 0.61424, 0.62568), glm::vec3(0.633, 0.727811, 0.633), 32.f});
-  std::shared_ptr<ShaderManager> fishShader = std::make_shared<ShaderManager>(
-    "shaders/3D.vs.glsl", "shaders/multiTexLights.fs.glsl"
+  return buildElements<FishData>(
+    glimac::cone_lowLOD(),
+    glimac::cone_highLOD(),
+    Material{glm::vec3(0.61568, 0.61424, 0.62568), glm::vec3(0.633, 0.727811, 0.633), 32.f},
+    "shaders/3D.vs.glsl",
+    "shaders/multiTexLights.fs.glsl",
+    "assets/textures/EarthMap.jpg"
   );
-  GLuint earthLocation =
-    TextureManager::getInstance().loadTexture("assets/textures/EarthMap.jpg");
-  fishShader->addUniformTexture("assets/textures/EarthMap.jpg", "uTexture1", earthLocation);
-
-  // GLuint cloudLocation =
-  //   TextureManager::getInstance().loadTexture("assets/textures/CloudMap.jpg");
-  // fishShader->addUniformTexture("assets/textures/CloudMap.jpg", "uTexture2", cloudLocation);
-
-  fishElements.setShaderManager(fishShader);
-
-  return fishElements;
 }
 
 static ElementManager<Obstacle> buildObstacles() {
-  ElementManager<Obstacle> obstacleElements;
-
-  obstacleElements.setElementVertices(glimac::sphere_lowLOD(), glimac::sphere_highLOD());
-  obstacleElements.setMaterial({glm::vec3(0.61568, 0.61424, 0.62568), glm::vec3(0.633, 0.727811, 0.633), 32.f});
-  std::shared_ptr<ShaderManager> obstaclesShader =
-    std::make_shared<ShaderManager>("shaders/3D.vs.glsl", "shaders/multiTexLights.fs.glsl");
-  GLuint moonLocation =
-    TextureManager::getInstance().loadTexture("assets/textures/MoonMap.jpg");
-  obstaclesShader->addUniformTexture("assets/textures/MoonMap.jpg", "uTexture1", moonLocation);
-  obstacleElements.setShaderManager(obstaclesShader);
-
-  return obstacleElements;
+  return buildElements<Obstacle>(
+    glimac::sphere_lowLOD(),
+    glimac::sphere_highLOD(),
+    Material{glm::vec3(0.61568, 0.61424, 0.62568), glm::vec3(0.633, 0.727811, 0.633), 32.f},
+    "shaders/3D.vs.glsl",
+    "shaders/multiTexLights.fs.glsl",
+    "assets/textures/MoonMap.jpg"
+  );
 }
 
 static ElementManager<Food> buildFoods() {
-  ElementManager<Food> foods;
+  return buildElements<Food>(
+    glimac::sphere_lowLOD(),
+    glimac::sphere_highLOD(),
+    Material{glm::vec3(0.61568, 0.61424, 0.62568), glm::vec3(0.633, 0.727811, 0.633), 32.f},
+    "shaders/3D.vs.glsl",
+    "shaders/multiTexLights.fs.glsl",
+    "assets/textures/MoonMap.jpg"
+  );
+}
 
-  foods.setElementVertices(glimac::sphere_lowLOD(), glimac::sphere_highLOD());
-  foods.setMaterial({glm::vec3(0.61568, 0.61424, 0.62568), glm::vec3(0.633, 0.727811, 0.633), 32.f});
-  std::shared_ptr<ShaderManager> foodShader =
-    std::make_shared<ShaderManager>("shaders/3D.vs.glsl", "shaders/multiTexLights.fs.glsl");
-  GLuint moonLocation =
-    TextureManager::getInstance().loadTexture("assets/textures/MoonMap.jpg");
-  foodShader->addUniformTexture("assets/textures/MoonMap.jpg", "uTexture1", moonLocation);
-  foods.setShaderManager(foodShader);
+static ElementManager<Boundary> buildBoundary() {
+  ElementManager<Boundary> boundary = buildElements<Boundary>(
+    glimac::cube_vertices(),
+    glimac::cube_vertices(),
+    Material{glm::vec3(0.61568, 0.61424, 0.62568), glm::vec3(0.633, 0.727811, 0.633), 32.f},
+    "shaders/3D.vs.glsl",
+    "shaders/multiTexLights.fs.glsl",
+    "assets/textures/quarry_04_puresky_1k.png"
+  );
 
-  return foods;
+  boundary.elements.emplace_back(std::make_shared<Boundary>());
+
+  return boundary;
 }
 
 Environment& Environment::build() {
@@ -85,6 +112,7 @@ Environment& Environment::build() {
   fishData  = buildFish();
   obstacles = buildObstacles();
   foods     = buildFoods();
+  boundary  = buildBoundary();
 
   return *this;
 }
