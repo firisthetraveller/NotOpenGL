@@ -150,7 +150,6 @@ void ElementManager<Element>::draw(const glm::vec3& cameraPos, const glm::mat4& 
     test &= _shader->setUniform3f("uKd", _material._diffuse);
     test &= _shader->setUniform3f("uKs", _material._specular);
     test &= _shader->setUniform1f("uShininess", _material._shininess);
-    std::cout << "Test: " << test << '\n';
 
     // glUniform light
     for (unsigned int i = 0; i < lights.size(); i++) {
@@ -159,8 +158,6 @@ void ElementManager<Element>::draw(const glm::vec3& cameraPos, const glm::mat4& 
       test &= _shader->setUniform3f("uDirectionalLights[" + std::to_string(i) + "].direction", glm::vec3(viewLight));
       test &= _shader->setUniform3f("uDirectionalLights[" + std::to_string(i) + "].intensity", lights[i]._intensity);
     }
-
-    std::cout << "Test: " << test << '\n';
 
     // glBindTexture
     _shader->enableActiveTextures();
