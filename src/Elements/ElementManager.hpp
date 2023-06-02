@@ -10,6 +10,7 @@
 #include "Config.hpp"
 #include "Elements/Positionable.hpp"
 #include "Lights/DirectionalLight.hpp"
+#include "Materials/Material.hpp"
 #include "OpenGL/ShaderManager.hpp"
 #include "glimac/common.hpp"
 #include "glm/ext/matrix_float4x4.hpp"
@@ -20,9 +21,11 @@ template<is_positionable Element>
 class ElementManager {
   private:
   GLuint                           _vao{};
+  GLuint                           _vbo{};
   std::shared_ptr<ShaderManager>   _shader;
   std::vector<glimac::ShapeVertex> _vertices;
   std::vector<unsigned int>        vertexCountLOD;
+  Material                         _material{};
 
   public:
   std::vector<std::shared_ptr<Element>> elements;
@@ -31,7 +34,9 @@ class ElementManager {
    * @param texturePath : Path to the file on the disk drive.
    */
   ElementManager();
+  ~ElementManager();
   void setElementVertices(const std::vector<glimac::ShapeVertex>& verticesLowLOD, const std::vector<glimac::ShapeVertex>& verticesHighLOD);
+  void setMaterial(const Material& material);
   void setShaderManager(const std::shared_ptr<ShaderManager>& shader);
   void draw(
     const glm::vec3&                     cameraPos,
@@ -46,7 +51,14 @@ class ElementManager {
 
 template<is_positionable Element>
 ElementManager<Element>::ElementManager() {
+  glGenBuffers(1, &_vbo);
   glGenVertexArrays(1, &_vao);
+}
+
+template<is_positionable Element>
+ElementManager<Element>::~ElementManager() {
+  glDeleteBuffers(1, &_vbo);
+  // glDeleteVertexArrays(1, &_vao);
 }
 
 template<is_positionable Element>
@@ -63,9 +75,7 @@ void ElementManager<Element>::setElementVertices(
   vertexCountLOD.emplace_back(verticesLowLOD.size());
   vertexCountLOD.emplace_back(verticesHighLOD.size());
 
-  GLuint vbo;
-  glGenBuffers(1, &vbo);
-  glBindBuffer(GL_ARRAY_BUFFER, vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, _vbo);
   {
     glBufferData(GL_ARRAY_BUFFER, _vertices.size() * sizeof(glimac::ShapeVertex), _vertices.data(), GL_STATIC_DRAW);
   }
@@ -82,7 +92,7 @@ void ElementManager<Element>::setElementVertices(
     const GLuint VERTEX_ATTR_UV_COORDS = 2;
     glEnableVertexAttribArray(VERTEX_ATTR_UV_COORDS);
 
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, _vbo);
     {
       // Attribute | Size | Variable size | ? | Size of one vertex complete data
       // | Offset
@@ -108,6 +118,11 @@ void ElementManager<Element>::setElementVertices(
 }
 
 template<is_positionable Element>
+void ElementManager<Element>::setMaterial(const Material& material) {
+  _material = material;
+}
+
+template<is_positionable Element>
 void ElementManager<Element>::setShaderManager(
   const std::shared_ptr<ShaderManager>& shader
 ) {
@@ -130,19 +145,25 @@ void ElementManager<Element>::draw(const glm::vec3& cameraPos, const glm::mat4& 
     // glUniforms
     _shader->setUniformTexture();
 
-    // glBindTexture
-    _shader->enableActiveTextures();
-
-    _shader->setUniform3f("uKd", glm::vec3(0.61568, 0.61424, 0.62568));
-    _shader->setUniform3f("uKs", glm::vec3(0.633, 0.727811, 0.633));
-    _shader->setUniform1f("uShininess", 32.f);
+    // glUniform material
+    bool test = true;
+    test &= _shader->setUniform3f("uKd", _material._diffuse);
+    test &= _shader->setUniform3f("uKs", _material._specular);
+    test &= _shader->setUniform1f("uShininess", _material._shininess);
+    std::cout << "Test: " << test << '\n';
 
     // glUniform light
     for (unsigned int i = 0; i < lights.size(); i++) {
       glm::vec4 viewLight = viewMatrix * lights[i].rotate(appTime * (glm::pi<float>() / 180.f));
-      _shader->setUniform3f("uDirectionalLights[" + std::to_string(i) + "].direction", glm::vec3(viewLight));
-      _shader->setUniform3f("uDirectionalLights[" + std::to_string(i) + "].intensity", lights[i]._intensity);
+      // std::cout << "uDirectionalLights[" + std::to_string(i) + "].direction\n";
+      test &= _shader->setUniform3f("uDirectionalLights[" + std::to_string(i) + "].direction", glm::vec3(viewLight));
+      test &= _shader->setUniform3f("uDirectionalLights[" + std::to_string(i) + "].intensity", lights[i]._intensity);
     }
+
+    std::cout << "Test: " << test << '\n';
+
+    // glBindTexture
+    _shader->enableActiveTextures();
 
     // Matrix shit
     for (auto& element : elements) {

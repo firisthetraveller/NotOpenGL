@@ -1,4 +1,5 @@
 #include "ShaderManager.hpp"
+#include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
@@ -44,10 +45,14 @@ void ShaderManager::setUniformMatrix(glm::mat4& MVPMatrix, glm::mat4& MVMatrix, 
   glUniformMatrix4fv(uNormalMatrix, 1, GL_FALSE, glm::value_ptr(NormalMatrix));
 }
 
-void ShaderManager::setUniform3f(const std::string& name, const glm::vec3& v) const {
-  glUniform3fv(glGetUniformLocation(program.id(), name.data()), 1, glm::value_ptr(v));
+bool ShaderManager::setUniform3f(const std::string& name, const glm::vec3& v) const {
+  GLint location = glGetUniformLocation(program.id(), name.data());
+  glUniform3fv(location, 1, glm::value_ptr(v));
+  return location != -1;
 }
 
-void ShaderManager::setUniform1f(const std::string& name, float x) const {
-  glUniform1f(glGetUniformLocation(program.id(), name.data()), x);
+bool ShaderManager::setUniform1f(const std::string& name, float x) const {
+  GLint location = glGetUniformLocation(program.id(), name.data());
+  glUniform1f(location, x);
+  return location != -1;
 }

@@ -4,6 +4,7 @@
 #include "Elements/Fish/FishData.hpp"
 #include "Elements/Obstacle/Obstacle.hpp"
 #include "Lights/DirectionalLight.hpp"
+#include "Materials/Material.hpp"
 #include "OpenGL/ShaderManager.hpp"
 #include "OpenGL/TextureManager.hpp"
 #include "glimac/cone_vertices.hpp"
@@ -32,6 +33,7 @@ static ElementManager<FishData> buildFish() {
   ElementManager<FishData> fishElements;
 
   fishElements.setElementVertices(glimac::cone_lowLOD(), glimac::cone_highLOD());
+  fishElements.setMaterial(Material{glm::vec3(0.61568, 0.61424, 0.62568), glm::vec3(0.633, 0.727811, 0.633), 32.f});
   std::shared_ptr<ShaderManager> fishShader = std::make_shared<ShaderManager>(
     "shaders/3D.vs.glsl", "shaders/multiTexLights.fs.glsl"
   );
@@ -52,6 +54,7 @@ static ElementManager<Obstacle> buildObstacles() {
   ElementManager<Obstacle> obstacleElements;
 
   obstacleElements.setElementVertices(glimac::sphere_lowLOD(), glimac::sphere_highLOD());
+  obstacleElements.setMaterial({glm::vec3(0.61568, 0.61424, 0.62568), glm::vec3(0.633, 0.727811, 0.633), 32.f});
   std::shared_ptr<ShaderManager> obstaclesShader =
     std::make_shared<ShaderManager>("shaders/3D.vs.glsl", "shaders/multiTexLights.fs.glsl");
   GLuint moonLocation =
@@ -66,6 +69,7 @@ static ElementManager<Food> buildFoods() {
   ElementManager<Food> foods;
 
   foods.setElementVertices(glimac::sphere_lowLOD(), glimac::sphere_highLOD());
+  foods.setMaterial({glm::vec3(0.61568, 0.61424, 0.62568), glm::vec3(0.633, 0.727811, 0.633), 32.f});
   std::shared_ptr<ShaderManager> foodShader =
     std::make_shared<ShaderManager>("shaders/3D.vs.glsl", "shaders/multiTexLights.fs.glsl");
   GLuint moonLocation =
